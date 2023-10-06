@@ -25,11 +25,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="engOut">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <widget class="QTextEdit" name="engOut"/>
       </item>
       <item>
        <widget class="QLabel" name="zenLable">
@@ -39,7 +35,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="zenOut"/>
+       <widget class="QTextEdit" name="zenOut"/>
       </item>
       <item>
        <widget class="QGraphicsView" name="graphicsView"/>
