@@ -61,7 +61,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_engOut_textEdited(const QString &arg1);
+    void on_engOut_textChanged();
 
 private:
     Ui::MainWindow *ui;

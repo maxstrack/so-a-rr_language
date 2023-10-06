@@ -12,12 +12,12 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_engOut_textEdited(const QString &arg1) {
+void MainWindow::on_engOut_textChanged() {
     convert();
 }
 
 void MainWindow::convert(){
-    const QString engWord = ui->engOut->text();
+    const QString engWord = ui->engOut->toPlainText();
     QList<QString> engSen;
     QString zenWord;
 
