@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/world.dir/world_autogen/mocs_compilation.cpp.o CMakeFiles/world.dir/main.cpp.o CMakeFiles/world.dir/mainwindow.cpp.o -o world  /usr/lib/x86_64-linux-gnu/libQt6Widgets.so.6.2.4 /usr/lib/x86_64-linux-gnu/libQt6Gui.so.6.2.4 /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.2.4 /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so 

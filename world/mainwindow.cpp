@@ -1,11 +1,12 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-
+#include <QSplitter>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    //QObject::connect();
+	//QSplitter* langSplitter = new QSpliter();
+	//QSplitter* graphSplitter = new QSpliter();
 }
 
 MainWindow::~MainWindow() {
