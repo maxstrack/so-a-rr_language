@@ -21,11 +21,11 @@ class UI(QMainWindow):
         i = QPixmap("../../letters/i.png")
         k = QPixmap("../../letters/k.png")
         l = QPixmap("../../letters/l.png")
-        m = QPixmap("../../letters/m.png")
+        h = QPixmap("../../letters/m.png")
         n = QPixmap("../../letters/n.png")
         o = QPixmap("../../letters/o.png")
         rr = QPixmap("../../letters/rr.png")
-        s = QPixmap("../../letters/s.png")
+        d = QPixmap("../../letters/s.png")
         sh = QPixmap("../../letters/sh.png")
         t = QPixmap("../../letters/t.png")
         th = QPixmap("../../letters/th.png")
@@ -38,36 +38,36 @@ class UI(QMainWindow):
         print("i  exists: ",os.path.exists("../../letters/i.png"))
         print("k  exists: ",os.path.exists("../../letters/k.png"))
         print("l  exists: ",os.path.exists("../../letters/l.png"))
-        print("m  exists: ",os.path.exists("../../letters/m.png"))
+        print("h  exists: ",os.path.exists("../../letters/m.png"))
         print("n  exists: ",os.path.exists("../../letters/n.png"))
         print("o  exists: ",os.path.exists("../../letters/o.png"))
         print("rr exists: ",os.path.exists("../../letters/rr.png"))
-        print("s  exists: ",os.path.exists("../../letters/s.png"))
+        print("d  exists: ",os.path.exists("../../letters/s.png"))
         print("sh exists: ",os.path.exists("../../letters/sh.png"))
         print("t  exists: ",os.path.exists("../../letters/t.png"))
         print("th exists: ",os.path.exists("../../letters/th.png"))
         print("uh exists: ",os.path.exists("../../letters/uh.png"))
         print("v  exists: ",os.path.exists("../../letters/v.png"))
-        print("z  exists: ",os.path.exists("../../letters/z.png"))
 
-        self.pixmaps = [a,z,eh,i,uh,rr,n,s,l,v,t,m,o,th,k,sh,f]
 
-        self.english = ['e', 't', 'a',  'o', 'i',  'n', 's', 'h', 'r', 'd', 'l', 'c', 'u', 'm',  'w',  'f',  'g']
-        self.zentil = ["a-", "z-", "eh-", "i-", "uh-", "rr-", "n-", "s-", "l-", "v-", "t-", "m-", "o-", "th-", "k-", "sh-", "f-"]
 
-        self.end2 = ["ed", "er"]
-        self.end3 = ["ion", "ing"]
-        self.endAll = [self.end2, self.end3]
+        self.english = ['e', 't', 'a',  'o', 'i',  'n',  's','h', 'r', 'd', 'l', 'c', 'u', 'm', 'w', 'f',  'g']
+        self.zentil =  ["a-","z-","eh-","i-","uh-","rr-","f-","n-","h-","v-","t-","l-","o-","th-","k-","sh-","d-"]
+        self.pixmaps = [ a,   z,   eh,   i,   uh,   rr,   f,   n,   h,   v,   t,   l,   o,   th,   k,   sh,   d]
+
+        end2 = ["ed", "er"]
+        end3 = ["ion", "ing"]
+        self.endAll = [end2, end3]
 
         r1L1 = ["y", "da"]
-        r2L1 = ["p", "te"]
-        r3L1 = ["b", "mo"]
-        r4L1 = ["v", "to"]
-        r5L1 = ["k", "na"]
-        r6L1 = ["j", "wa"]
-        r7L1 = ["x", "on"]
-        r8L1 = ["p", "mu"]
-        r9L1 = ["z", "hi"]
+        r2L1 = ["p", "t"]
+        r3L1 = ["v", "f"]
+        r4L1 = ["j", "g"]
+        r5L1 = ["x", "on"]
+        r6L1 = ["q", "k"]
+        r7L1 = ["z", "s"]
+        r8L1 = ["b", "oe"]
+        r9L1 = ["k", "c"]
 
         r1L2 = ["cc", "c"]
         r2L2 = ["ll", "l"]
@@ -79,11 +79,15 @@ class UI(QMainWindow):
         r8L2 = ["ee", "e"]
         r9L2 = ["rr", "r"]
         r10L2 = ["kn", "k"]
+        r11L2 = ["ss", "s"]
+        r12L2 = ["ck", "c"]
+        r13L2 = ["qu", "k"]
+
 
         r1L3 = ["ght", "gt"]
 
         self.replace1 = [r1L1, r2L1, r3L1, r4L1, r5L1, r6L1, r7L1, r8L1, r9L1]
-        self.replace2 = [r1L2, r2L2, r3L2, r4L2, r5L2, r6L2, r7L2, r8L2, r9L2, r10L2]
+        self.replace2 = [r1L2, r2L2, r3L2, r4L2, r5L2, r6L2, r7L2, r8L2, r9L2, r10L2, r11L2, r12L2, r13L2]
         self.replace3 = [r1L3]
         self.replaceAll = [self.replace1, self.replace2, self.replace3]
 
@@ -111,14 +115,14 @@ class UI(QMainWindow):
             word = engSen[targetWord]
 
             # Trim the ending depending on the endAll list
-            if len(word) > 4:
-                for i in range(2, 4):
-                    for j in range(len(self.endAll[i - 2])):
-                        if word.endswith(self.endAll[i - 2][j]):
-                            word = word[:-i]
+            #if len(word) > 4:
+            #    for i in range(2, 4):
+            #        for j in range(len(self.endAll[i - 2])):
+            #            if word.endswith(self.endAll[i - 2][j]):
+            #                word = word[:-i]
 
             # Replces all unwanted combinations baced on the replaceAll list
-            for i in range(1, 4):
+            for i in range(3, 0, -1):
                 for j in range(len(self.replaceAll[i - 1])):
                     index = 0
                     while index < len(word):
@@ -128,12 +132,23 @@ class UI(QMainWindow):
                         word = word[:index] + self.replaceAll[i - 1][j][1] + word[index + i:]
                         index += i
 
+            # Remove duplicates
+            #for i in range(1, len(word)):
+            #    if word[i] == word[i-1]:
+            #        word = word[:i-1] + word[i:]
+            #        i=-1
+            result = []
+            for i in range(len(word)):
+                if i == 0 or word[i] != word[i-1]:
+                    result.append(word[i])
+            word = result
+
             # Save changes to the word
             engSen[targetWord] = word
 
             # Convert to Zentil
             for char in word:
-                for j in range(17):
+                for j in range(len(self.zentil)):
                     if char == self.english[j]:
                         zenWord += self.zentil[j]
 
@@ -152,9 +167,11 @@ class UI(QMainWindow):
             self.letterDisplay(engSen)
 
     def letterDisplay(self, eng):
+        # Emplty used for spaces
         empty = QPixmap(self.pixmaps[0].width(), self.pixmaps[0].height())
         empty.fill(Qt.transparent)
 
+        # Set up an empty pixmap to paint the images
         width = 0
         for word in eng:
             for char in word:
@@ -174,14 +191,16 @@ class UI(QMainWindow):
             print("Failed to initialize QPainter")
             return
 
+        # Paint the proper images based on the english list
         width = 0
-
         for word in eng:
             for char in word:
                 for alph in range(17):
                     if char == self.english[alph]:
+                        # The lists are kept in order so the index is used to find the letter
                         painter.drawPixmap(width, 0, self.pixmaps[alph])
                         width += self.pixmaps[alph].width() - 2
+            # Space
             painter.drawPixmap(width, 0, empty)
             width += empty.width()
         painter.end()  # Ensure this is called to finish painting
