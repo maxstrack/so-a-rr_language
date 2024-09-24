@@ -63,42 +63,10 @@ class UI(QMainWindow):
 		print("space  exists: ",os.path.exists("../../letters/space.png"))
 		print("vowle  exists: ",os.path.exists("../../letters/vowle.png"))
 		consonants = [s, z, t, n, k]
-		newC = []
+		newC = self.paintNewMaps(consonants, consonant) 
 		vowles = [e, a, u, i, oo, ah]
-		newV = []
+		newV = self.paintNewMaps(vowles, vowle) 
 	
-		for pixmap in consonants:
-			width = pixmap.width() + consonant.width()
-			height = max(pixmap.height(), consonant.height())
-
-			newMap = QPixmap(width, height)
-			newMap.fill(Qt.transparent)
-
-			painter = QPainter()
-			painter.begin(newMap)
-			painter.drawPixmap(0, 0, pixmap)
-			width = pixmap.width()
-			painter.drawPixmap(width-padding, 0, consonant)
-
-			painter.end()
-			newC.append(newMap)
-
-		for pixmap in vowles:
-			width = pixmap.width() + vowle.width()
-			height = max(pixmap.height(), vowle.height())
-
-			newMap = QPixmap(width, height)
-			newMap.fill(Qt.transparent)
-
-			painter = QPainter()
-			painter.begin(newMap)
-			painter.drawPixmap(0, 0, pixmap)
-			width = pixmap.width()
-			painter.drawPixmap(width-padding, 0, vowle)
-
-			painter.end()
-			newV.append(newMap)
-
 		initialData = {
 		# consonants
 			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s-', s),  # /k/ sound
@@ -138,6 +106,25 @@ class UI(QMainWindow):
 		}
 
 		self.convertDict = AliasDict(initialData)
+
+	def paintNewMaps(self, letterList, letterType ):
+		newMaps = []
+		for pixmap in letterList:
+			width = pixmap.width() + letterType.width()
+			height = max(pixmap.height(), letterType.height())
+
+			newMap = QPixmap(width, height)
+			newMap.fill(Qt.transparent)
+
+			painter = QPainter()
+			painter.begin(newMap)
+			painter.drawPixmap(0, 0, pixmap)
+			width = pixmap.width()
+			painter.drawPixmap(width-padding, 0, letterType)
+
+			painter.end()
+			newMaps.append(newMap)
+		return newMaps
 
 	def on_engOut_textChanged(self):
 		self.convert()
