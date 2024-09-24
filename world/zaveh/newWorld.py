@@ -7,6 +7,9 @@ from PyQt5.QtCore import Qt
 
 from aliasDict import AliasDict
 
+global padding
+padding = 2
+
 class UI(QMainWindow):
 	def __init__(self):
 		super(UI, self).__init__()
@@ -17,81 +20,123 @@ class UI(QMainWindow):
 		self.engOut.textChanged.connect(self.on_engOut_textChanged)
 
 	def initVariables(self):
+		ah = QPixmap("../../letters/ah.png")
 		a = QPixmap("../../letters/a.png")
-		eh = QPixmap("../../letters/eh.png")
+		d = QPixmap("../../letters/d.png")
+		e = QPixmap("../../letters/e.png")
 		f = QPixmap("../../letters/f.png")
 		i = QPixmap("../../letters/i.png")
 		k = QPixmap("../../letters/k.png")
 		l = QPixmap("../../letters/l.png")
-		h = QPixmap("../../letters/m.png")
 		n = QPixmap("../../letters/n.png")
-		o = QPixmap("../../letters/o.png")
+		oo = QPixmap("../../letters/oo.png")
 		rr = QPixmap("../../letters/rr.png")
-		d = QPixmap("../../letters/s.png")
-		sh = QPixmap("../../letters/sh.png")
+		s = QPixmap("../../letters/s.png")
 		t = QPixmap("../../letters/t.png")
-		th = QPixmap("../../letters/th.png")
-		uh = QPixmap("../../letters/uh.png")
+		u = QPixmap("../../letters/u.png")
 		v = QPixmap("../../letters/v.png")
+		w = QPixmap("../../letters/w.png")
 		z = QPixmap("../../letters/z.png")
-		print("a  exists: ",os.path.exists("../../letters/a.png"))
-		print("eh exists: ",os.path.exists("../../letters/eh.png"))
+		consonant = QPixmap("../../letters/consonant.png")
+		KA = QPixmap("../../letters/KA.png")
+		space = QPixmap("../../letters/space.png")
+		vowle = QPixmap("../../letters/vowle.png")
+		print("ah  exists: ",os.path.exists("../../letters/ah.png"))
+		print("a exists: ",os.path.exists("../../letters/a.png"))
+		print("d  exists: ",os.path.exists("../../letters/s.png"))
+		print("e  exists: ",os.path.exists("../../letters/e.png"))
 		print("f  exists: ",os.path.exists("../../letters/f.png"))
 		print("i  exists: ",os.path.exists("../../letters/i.png"))
 		print("k  exists: ",os.path.exists("../../letters/k.png"))
 		print("l  exists: ",os.path.exists("../../letters/l.png"))
-		print("h  exists: ",os.path.exists("../../letters/m.png"))
 		print("n  exists: ",os.path.exists("../../letters/n.png"))
-		print("o  exists: ",os.path.exists("../../letters/o.png"))
+		print("oo  exists: ",os.path.exists("../../letters/oo.png"))
 		print("rr exists: ",os.path.exists("../../letters/rr.png"))
-		print("d  exists: ",os.path.exists("../../letters/s.png"))
-		print("sh exists: ",os.path.exists("../../letters/sh.png"))
+		print("s exists: ",os.path.exists("../../letters/s.png"))
 		print("t  exists: ",os.path.exists("../../letters/t.png"))
-		print("th exists: ",os.path.exists("../../letters/th.png"))
-		print("uh exists: ",os.path.exists("../../letters/uh.png"))
+		print("u exists: ",os.path.exists("../../letters/u.png"))
 		print("v  exists: ",os.path.exists("../../letters/v.png"))
+		print("w  exists: ",os.path.exists("../../letters/w.png"))
+		print("z  exists: ",os.path.exists("../../letters/z.png"))
+		print("consonant  exists: ",os.path.exists("../../letters/consonant.png"))
+		print("KA  exists: ",os.path.exists("../../letters/KA.png"))
+		print("space  exists: ",os.path.exists("../../letters/space.png"))
+		print("vowle  exists: ",os.path.exists("../../letters/vowle.png"))
+		consonants = [s, z, t, n, k]
+		newC = []
+		vowles = [e, a, u, i, oo, ah]
+		newV = []
+	
+		for pixmap in consonants:
+			width = pixmap.width() + consonant.width()
+			height = max(pixmap.height(), consonant.height())
 
+			newMap = QPixmap(width, height)
+			newMap.fill(Qt.transparent)
 
+			painter = QPainter()
+			painter.begin(newMap)
+			painter.drawPixmap(0, 0, pixmap)
+			width = pixmap.width()
+			painter.drawPixmap(width-padding, 0, consonant)
 
-		#self.english = ['e', 't', 'a',  'o', 'i',	'n',  's','h', 'r', 'd', 'l', 'c', 'u', 'm', 'w', 'f',	'g']
-		#self.zentil =	["a-","z-","eh-","i-","uh-","rr-","f-","n-","h-","v-","t-","l-","o-","th-","k-","sh-","d-"]
-		#self.pixmaps = [ a,   z,	eh,   i,   uh,	 rr,   f,	n,	 h,   v,   t,	l,	 o,   th,	k,	 sh,   d]
+			painter.end()
+			newC.append(newMap)
+
+		for pixmap in vowles:
+			width = pixmap.width() + vowle.width()
+			height = max(pixmap.height(), vowle.height())
+
+			newMap = QPixmap(width, height)
+			newMap.fill(Qt.transparent)
+
+			painter = QPainter()
+			painter.begin(newMap)
+			painter.drawPixmap(0, 0, pixmap)
+			width = pixmap.width()
+			painter.drawPixmap(width-padding, 0, vowle)
+
+			painter.end()
+			newV.append(newMap)
+
 		initialData = {
 		# consonants
-			('d', 'dd', 'ed')								: ('v-',),  # /d/ sound
-			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s-',),  # /k/ sound
-			('l', 'll', 'b', 'bb')							: ('t-',),  # /l/,/b/ sound
-			('n', 'nn', 'kn', 'gn', 'pn')					: ('rr-',),  # /n/ sound
-			('r', 'rr', 'wr', 'rh')							: ('l-',),  # /r/ sound
-			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('f-',),  # /s/ sound
-			('t', 'tt', 'p', 'pp')							: ('z-',),  # /t/,/p/ sound
-			('z', 'se', 'ss', 'ze')							: ('ch-',),  # /z/ sound
-			('v', 'ph', 've')								: ('k-',),  # /v/ sound
+			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s-', s),  # /k/ sound
+			('t', 'tt', 'p', 'pp')							: ('z-', z),  # /t/,/p/ sound
+			('l', 'll', 'b', 'bb')							: ('t-', t),  # /l/,/b/ sound
+			('sh', 'sci', 'ti', 'ci')						: ('n-', n),  # /sh/ sound
+			('v', 'ph', 've')								: ('k-', k),  # /v/ sound
+			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr-', rr),	# /n/ sound
+			('r', 'rr', 'wr', 'rh')							: ('l-', l),  # /r/ sound
+			('ch', 'tch', 'tu','te')						: ('d-', d),  # /ch/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('w-', w),  # /ng/,/g/ sound
+			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('f-', f),  # /s/ sound
+			('d', 'dd', 'ed')								: ('v-', v),  # /d/ sound
 		# digraphs
-			('j', 'ge', 'dge', 'di', 'gg')					: ('zh-',),  # /j/ sound
-			('ch', 'tch', 'tu','te')						: ('d-',),  # /ch/ sound
-			('sh', 'sci', 'ti', 'ci')						: ('n-',),  # /sh/ sound
-			('th')											: ('KH-',),  # /th/ sound (feather)
-			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh-',),  # /f/ sound
-			('w', 'wh', 'h','m', 'mm', 'mb', 'mn', 'lm')	: ('th-',),  # /w/,/m/,/h/ sound
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('w-',),  # /ng/,/g/ sound
+			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh-', newC[0]),  # /f/ sound
+			('j', 'ge', 'dge', 'di', 'gg')					: ('zh-', newC[1]),  # /j/ sound
+			('m', 'mm', 'mb', 'mn', 'lm')					: ('th-', newC[2]),  # /m/ sound
+			('w', 'wh', 'h')								: ('ng-', newC[3]),  # /w/,/h/ sound
+			('z', 'se', 'ss', 'ze')							: ('ch-', newC[4]),  # /z/ sound
+			('th')											: ('KH-', KA),  # /th/ sound (feather)
 		# vowels
-			('a', 'ai', 'ea', 'u', 'ie')					: ('e-',),  # /a/ sound (short a)
-			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a-',),  # /e/ sound
-			('i', 'ie', 'u', 'ui')							: ('u-',),  # /i/ sound
-			('o', 'ho', 'y')								: ('i-',),  # /o/,/y/ sound
-			('u')											: ('oo-',),  # /u/ sound
-			('oo', 'ou')									: ('ah-',),  # /oo/ sound (short oo)
+			('a', 'ai', 'ea', 'u', 'ie')					: ('e-', e),  # /a/ sound (short a)
+			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a-', a),  # /e/ sound
+			('i', 'ie', 'u', 'ui')							: ('u-', u),  # /i/ sound
+			('o', 'ho', 'y')								: ('i-', i),  # /o/,/y/ sound
+			('u')											: ('oo-', oo),	# /u/ sound
+			('oo', 'ou')									: ('ah-', ah),	# /oo/ sound (short oo)
 		#long_vowels
-			('ai', 'eigh', 'ay', 'a-e')						: ('ie-',),  # /ā/ sound
-			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay-',),  # /ē/ sound
-			('igh', 'i-e')									: ('ew-',),  # /ī/ sound
-			('oa', 'o-e', 'ow')								: ('ī-',),  # /ō/ sound
-			('ew')											: ('oy-',),  # /ü/ sound
-			('oi', 'oy', 'uoy')								: ('ow-',),  # /oi/ sound
+			('ai', 'eigh', 'ay', 'a-e')						: ('ie-', newV[0]),  # /ā/ sound
+			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay-', newV[1]),  # /ē/ sound
+			('igh', 'i-e')									: ('ew-', newV[2]),  # /ī/ sound
+			('oa', 'o-e', 'ow')								: ('ī-', newV[3]),	# /ō/ sound
+			('ew')											: ('oy-', newV[4]),  # /ü/ sound
+			('oi', 'oy', 'uoy')								: ('ow-', newV[5]),  # /oi/ sound
 		#special chars
-			' '	: (' ',),												
+			' '	: (' ', space),												
 		}
+
 		self.convertDict = AliasDict(initialData)
 
 	def on_engOut_textChanged(self):
@@ -104,32 +149,28 @@ class UI(QMainWindow):
 		convertedList = self.convertDict.convertString(engWord)
 		for pair in convertedList:
 			zenWord += pair[0]
-			
 
 		self.zenOut.setText(zenWord)
 
-		'''
-		if self.graphicsView.scene():
-			self.graphicsView.scene().clear()
-		if engSen:
-			self.letterDisplay(engSen)
+		self.letterDisplay(convertedList)
 
-	def letterDisplay(self, eng):
-		# Emplty used for spaces
-		empty = QPixmap(self.pixmaps[0].width(), self.pixmaps[0].height())
-		empty.fill(Qt.transparent)
-
+	def letterDisplay(self, convertedList):
 		# Set up an empty pixmap to paint the images
-		width = 0
-		for word in eng:
-			for char in word:
-				for alph in range(17):
-					if char == self.english[alph]:
-						width += self.pixmaps[alph].width() - 2
-			width += self.pixmaps[0].width()
+		for pair in convertedList:
+			if pair[1].isNull():
+				print(f"Error: One of the pixmaps is null! Pair: {pair}")
+				return
 
-		disp = QPixmap(width, self.pixmaps[0].height())
+		width = 0
+		height = 0
+		for pair in convertedList:
+			width += pair[1].width()-padding
+			height = max(height, pair[1].height())
+
+		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
+		#print(f"Final width: {width}, height: {height}")
+
 		if disp.isNull():
 			print("Error: Disp QPixmap is null!")
 			return
@@ -139,26 +180,21 @@ class UI(QMainWindow):
 			print("Failed to initialize QPainter")
 			return
 
-		# Paint the proper images based on the english list
+		# Paint the proper images
 		width = 0
-		for word in eng:
-			for char in word:
-				for alph in range(17):
-					if char == self.english[alph]:
-						# The lists are kept in order so the index is used to find the letter
-						painter.drawPixmap(width, 0, self.pixmaps[alph])
-						width += self.pixmaps[alph].width() - 2
-			# Space
-			painter.drawPixmap(width, 0, empty)
-			width += empty.width()
+		for pair in convertedList:
+			painter.drawPixmap(width, 0, pair[1])
+			width += pair[1].width()-padding
+
 		painter.end()  # Ensure this is called to finish painting
 
 		if not self.graphicsView.scene():
 			scene = QGraphicsScene(self)
 			self.graphicsView.setScene(scene)
-
+		else:
+			self.graphicsView.scene().clear()
+			
 		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
-			'''
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
