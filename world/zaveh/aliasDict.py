@@ -24,6 +24,7 @@ class AliasDict:
 		else:
 			raise KeyError(f"Key '{key}' not found to alias.")
 
+	# Get the Value from a key/alias
 	def getValue(self, keyOrAlias):
 		if keyOrAlias in self.dataStore:
 			return self.dataStore[keyOrAlias]
@@ -51,7 +52,6 @@ class AliasDict:
 		# Create a regex pattern to match any key or alias
 		pattern = re.compile('|'.join(map(re.escape, allKeys)))
 
-		# Find and collect each match without substituting them in the string
 		pattern.sub(collectMatch, inputString)
 	
 		return tupleList

@@ -17,7 +17,7 @@ class UI(QMainWindow):
 		self.initVariables()
 		
 		# Connect the textChanged signal to the slot
-		self.engOut.textChanged.connect(self.on_engOut_textChanged)
+		self.engOut.textChanged.connect(self.convert)
 
 	def initVariables(self):
 		ah = QPixmap("../../letters/ah.png")
@@ -62,6 +62,8 @@ class UI(QMainWindow):
 		print("KA  exists: ",os.path.exists("../../letters/KA.png"))
 		print("space  exists: ",os.path.exists("../../letters/space.png"))
 		print("vowle  exists: ",os.path.exists("../../letters/vowle.png"))
+
+		# Make Lists of the new consonant and vowle pixmaps
 		consonants = [s, z, t, n, k]
 		newC = self.paintNewMaps(consonants, consonant) 
 		vowles = [e, a, u, i, oo, ah]
@@ -70,29 +72,29 @@ class UI(QMainWindow):
 		initialData = {
 		# consonants
 			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s-', s),  # /k/ sound
-			('t', 'tt', 'p', 'pp')							: ('z-', z),  # /t/,/p/ sound
-			('l', 'll', 'b', 'bb')							: ('t-', t),  # /l/,/b/ sound
+			('t', 'tt', 'th')								: ('z-', z),  # /t/,/th/ sound
+			('l', 'll', 'p', 'pp')							: ('t-', t),  # /l/,/b/ sound
 			('sh', 'sci', 'ti', 'ci')						: ('n-', n),  # /sh/ sound
-			('v', 'ph', 've')								: ('k-', k),  # /v/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('k-', k),  # /ng/,/g/ sound
+			('v', 'ph', 've')								: ('h-', w),  # /v/ sound
 			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr-', rr),	# /n/ sound
 			('r', 'rr', 'wr', 'rh')							: ('l-', l),  # /r/ sound
 			('ch', 'tch', 'tu','te')						: ('d-', d),  # /ch/ sound
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('w-', w),  # /ng/,/g/ sound
-			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('f-', f),  # /s/ sound
-			('d', 'dd', 'ed')								: ('v-', v),  # /d/ sound
+			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('v-', v),  # /s/ sound
+			('d', 'dd', 'ed')								: ('f-', f),  # /d/ sound
 		# digraphs
 			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh-', newC[0]),  # /f/ sound
 			('j', 'ge', 'dge', 'di', 'gg')					: ('zh-', newC[1]),  # /j/ sound
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('th-', newC[2]),  # /m/ sound
 			('w', 'wh', 'h')								: ('ng-', newC[3]),  # /w/,/h/ sound
 			('z', 'se', 'ss', 'ze')							: ('ch-', newC[4]),  # /z/ sound
-			('th')											: ('KH-', KA),  # /th/ sound (feather)
+			('b', 'bb')										: ('KH-', KA),  # /b/ sound (feather)
 		# vowels
-			('a', 'ai', 'ea', 'u', 'ie')					: ('e-', e),  # /a/ sound (short a)
+			('a', 'ai', 'ea', 'u', 'ie')					: ('eh-', e),  # /a/ sound (short a)
 			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a-', a),  # /e/ sound
 			('i', 'ie', 'u', 'ui')							: ('u-', u),  # /i/ sound
 			('o', 'ho', 'y')								: ('i-', i),  # /o/,/y/ sound
-			('u')											: ('oo-', oo),	# /u/ sound
+			('u')											: ('uh-', oo),	# /u/ sound
 			('oo', 'ou')									: ('ah-', ah),	# /oo/ sound (short oo)
 		#long_vowels
 			('ai', 'eigh', 'ay', 'a-e')						: ('ie-', newV[0]),  # /ā/ sound
@@ -105,8 +107,10 @@ class UI(QMainWindow):
 			' '	: (' ', space),												
 		}
 
+		# Make a new Dictionary using AliasDict
 		self.convertDict = AliasDict(initialData)
 
+	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
 		newMaps = []
 		for pixmap in letterList:
@@ -126,21 +130,26 @@ class UI(QMainWindow):
 			newMaps.append(newMap)
 		return newMaps
 
-	def on_engOut_textChanged(self):
-		self.convert()
-
+	# Converts the english to zentil and calls letterDisplay
 	def convert(self):
 		engWord = self.engOut.toPlainText().lower()
-		engSen = []
 		zenWord = ""
 		convertedList = self.convertDict.convertString(engWord)
 		for pair in convertedList:
 			zenWord += pair[0]
 
+
 		self.zenOut.setText(zenWord)
 
+		if not self.graphicsView.scene():
+			scene = QGraphicsScene(self)
+			self.graphicsView.setScene(scene)
+		else:
+			self.graphicsView.scene().clear()
+	
 		self.letterDisplay(convertedList)
 
+	# Constructs a pixpam of the conversion from ConvertedList
 	def letterDisplay(self, convertedList):
 		# Set up an empty pixmap to paint the images
 		for pair in convertedList:
@@ -175,12 +184,6 @@ class UI(QMainWindow):
 
 		painter.end()  # Ensure this is called to finish painting
 
-		if not self.graphicsView.scene():
-			scene = QGraphicsScene(self)
-			self.graphicsView.setScene(scene)
-		else:
-			self.graphicsView.scene().clear()
-			
 		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
 
 if __name__ == "__main__":
