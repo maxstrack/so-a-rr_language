@@ -4,6 +4,8 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene
 from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtCore import Qt
+import qdarkgraystyle
+
 
 from aliasDict import AliasDict
 
@@ -138,7 +140,6 @@ class UI(QMainWindow):
 		for pair in convertedList:
 			zenWord += pair[0]
 
-
 		self.zenOut.setText(zenWord)
 
 		if not self.graphicsView.scene():
@@ -190,4 +191,6 @@ if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
 	ui = UI()
 	ui.show()
+	app.setStyleSheet(qdarkgraystyle.load_stylesheet())
+
 	sys.exit(app.exec_())
