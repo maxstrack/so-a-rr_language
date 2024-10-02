@@ -135,7 +135,6 @@ class UI(QMainWindow):
 
 	def replaceImageColor(self, pixmap):
 
-		replacementColor = QColor(255, 0, 0)
 		image = pixmap.toImage()
 
 		# Convert the image to format suitable for fast access
@@ -151,7 +150,7 @@ class UI(QMainWindow):
 		arr = np.frombuffer(ptr, np.uint8).reshape((height, width, 4))
 	
 		# Only modify pixels with non-zero alpha
-		arr[arr[:, :, 3] > 0] = [255, 0, 0, 255]
+		arr[arr[:, :, 3] > 0] = [255, 255, 255, 255] # white
 	
 		return QPixmap.fromImage(image)
 
