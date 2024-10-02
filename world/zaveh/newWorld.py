@@ -2,8 +2,9 @@ import sys
 import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene
-from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage
 from PyQt5.QtCore import Qt
+import numpy as np
 import qdarkgraystyle
 
 
@@ -90,7 +91,7 @@ class UI(QMainWindow):
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('th-', newC[2]),  # /m/ sound
 			('w', 'wh', 'h')								: ('ng-', newC[3]),  # /w/,/h/ sound
 			('z', 'se', 'ss', 'ze')							: ('ch-', newC[4]),  # /z/ sound
-			('b', 'bb')										: ('KH-', KA),  # /b/ sound (feather)
+			('b', 'bb')										: ('KH-', KA),	# /b/ sound (feather)
 		# vowels
 			('a', 'ai', 'ea', 'u', 'ie')					: ('eh-', e),  # /a/ sound (short a)
 			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a-', a),  # /e/ sound
@@ -131,6 +132,29 @@ class UI(QMainWindow):
 			painter.end()
 			newMaps.append(newMap)
 		return newMaps
+
+	def replaceImageColor(self, pixmap):
+
+		replacementColor = QColor(255, 0, 0)
+		image = pixmap.toImage()
+
+		# Convert the image to format suitable for fast access
+		image = image.convertToFormat(QImage.Format_RGBA8888)
+		width = image.width()
+		height = image.height()
+	
+		# Get the image as a buffer of bytes
+		ptr = image.bits()
+		ptr.setsize(width * height * 4)
+	
+		# Convert to a numpy array
+		arr = np.frombuffer(ptr, np.uint8).reshape((height, width, 4))
+	
+		# Only modify pixels with non-zero alpha
+		arr[arr[:, :, 3] > 0] = [255, 0, 0, 255]
+	
+		return QPixmap.fromImage(image)
+
 
 	# Converts the english to zentil and calls letterDisplay
 	def convert(self):
@@ -184,6 +208,8 @@ class UI(QMainWindow):
 			width += pair[1].width()-padding
 
 		painter.end()  # Ensure this is called to finish painting
+
+		disp = self.replaceImageColor(disp)
 
 		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
 
