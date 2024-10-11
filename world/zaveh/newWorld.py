@@ -16,7 +16,7 @@ padding = 2
 class UI(QMainWindow):
 	def __init__(self):
 		super(UI, self).__init__()
-		uic.loadUi('../mainwindow.ui', self)  # Load the .ui file
+		uic.loadUi('./mainwindow.ui', self)  # Load the .ui file
 		self.initVariables()
 		
 		# Connect the textChanged signal to the slot
@@ -76,7 +76,7 @@ class UI(QMainWindow):
 		# consonants
 			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s-', s),  # /k/ sound
 			('t', 'tt', 'th')								: ('z-', z),  # /t/,/th/ sound
-			('l', 'll', 'p', 'pp')							: ('t-', t),  # /l/,/b/ sound
+			('l', 'll', 'p', 'pp')							: ('t-', t),  # /l/,/p/ sound
 			('sh', 'sci', 'ti', 'ci')						: ('n-', n),  # /sh/ sound
 			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('k-', k),  # /ng/,/g/ sound
 			('v', 'ph', 've')								: ('h-', w),  # /v/ sound
@@ -91,9 +91,9 @@ class UI(QMainWindow):
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('th-', newC[2]),  # /m/ sound
 			('w', 'wh', 'h')								: ('ng-', newC[3]),  # /w/,/h/ sound
 			('z', 'se', 'ss', 'ze')							: ('ch-', newC[4]),  # /z/ sound
-			('b', 'bb')										: ('KH-', KA),	# /b/ sound (feather)
+			('b', 'bb')										: ('KH-', KA),	# /b/
 		# vowels
-			('a', 'ai', 'ea', 'u', 'ie')					: ('eh-', e),  # /a/ sound (short a)
+			('a', 'ea',)									: ('eh-', e),  # /a/ sound (short a)
 			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a-', a),  # /e/ sound
 			('i', 'ie', 'u', 'ui')							: ('u-', u),  # /i/ sound
 			('o', 'ho', 'y')								: ('i-', i),  # /o/,/y/ sound
@@ -105,7 +105,7 @@ class UI(QMainWindow):
 			('igh', 'i-e')									: ('ew-', newV[2]),  # /ī/ sound
 			('oa', 'o-e', 'ow')								: ('ī-', newV[3]),	# /ō/ sound
 			('ew')											: ('oy-', newV[4]),  # /ü/ sound
-			('oi', 'oy', 'uoy')								: ('ow-', newV[5]),  # /oi/ sound
+			('oi', 'oy', 'uoy')								: ('ō-', newV[5]),  # /oi/ sound
 		#special chars
 			' '	: (' ', space),												
 		}
@@ -134,10 +134,7 @@ class UI(QMainWindow):
 		return newMaps
 
 	def replaceImageColor(self, pixmap):
-
 		image = pixmap.toImage()
-
-		# Convert the image to format suitable for fast access
 		image = image.convertToFormat(QImage.Format_RGBA8888)
 		width = image.width()
 		height = image.height()
