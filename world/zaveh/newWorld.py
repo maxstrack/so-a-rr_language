@@ -74,38 +74,38 @@ class UI(QMainWindow):
 	
 		initialData = {
 		# consonants
-			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s-', s),  # /k/ sound
-			('t', 'tt', 'th')								: ('z-', z),  # /t/,/th/ sound
-			('l', 'll', 'p', 'pp')							: ('t-', t),  # /l/,/p/ sound
-			('sh', 'sci', 'ti', 'ci')						: ('n-', n),  # /sh/ sound
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('k-', k),  # /ng/,/g/ sound
-			('v', 'ph', 've')								: ('h-', w),  # /v/ sound
-			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr-', rr),	# /n/ sound
-			('r', 'rr', 'wr', 'rh')							: ('l-', l),  # /r/ sound
-			('ch', 'tch', 'tu','te')						: ('d-', d),  # /ch/ sound
-			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('v-', v),  # /s/ sound
-			('d', 'dd', 'ed')								: ('f-', f),  # /d/ sound
+			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s', s),  # /k/ sound
+			('t', 'tt', 'th')								: ('z', z),  # /t/,/th/ sound
+			('l', 'll', 'p', 'pp')							: ('t', t),  # /l/,/p/ sound
+			('sh', 'sci', 'ti', 'ci')						: ('n', n),  # /sh/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('k', k),  # /ng/,/g/ sound
+			('v', 'ph', 've')								: ('h', w),  # /v/ sound
+			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr', rr),	# /n/ sound
+			('r', 'rr', 'wr', 'rh')							: ('l', l),  # /r/ sound
+			('ch', 'tch', 'tu','te')						: ('d', d),  # /ch/ sound
+			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('v', v),  # /s/ sound
+			('d', 'dd', 'ed')								: ('f', f),  # /d/ sound
 		# digraphs
-			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh-', newC[0]),  # /f/ sound
-			('j', 'ge', 'dge', 'di', 'gg')					: ('zh-', newC[1]),  # /j/ sound
-			('m', 'mm', 'mb', 'mn', 'lm')					: ('th-', newC[2]),  # /m/ sound
-			('w', 'wh', 'h')								: ('ng-', newC[3]),  # /w/,/h/ sound
-			('z', 'se', 'ss', 'ze')							: ('ch-', newC[4]),  # /z/ sound
-			('b', 'bb')										: ('KH-', KA),	# /b/
+			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),  # /f/ sound
+			('j', 'ge', 'dge', 'di', 'gg')					: ('zh', newC[1]),  # /j/ sound
+			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),  # /m/ sound
+			('w', 'wh', 'h')								: ('ng', newC[3]),  # /w/,/h/ sound
+			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),  # /z/ sound
+			('b', 'bb')										: ('KH', KA),	# /b/
 		# vowels
-			('a', 'ea',)									: ('eh-', e),  # /a/ sound (short a)
-			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a-', a),  # /e/ sound
-			('i', 'ie', 'u', 'ui')							: ('u-', u),  # /i/ sound
-			('o', 'ho', 'y')								: ('i-', i),  # /o/,/y/ sound
-			('u')											: ('uh-', oo),	# /u/ sound
-			('oo', 'ou')									: ('ah-', ah),	# /oo/ sound (short oo)
+			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
+			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a', a),  # /e/ sound
+			('i', 'ie', 'u', 'ui')							: ('u', u),  # /i/ sound
+			('o', 'ho', 'y')								: ('i', i),  # /o/,/y/ sound
+			('u')											: ('uh', oo),	# /u/ sound
+			('oo', 'ou')									: ('ah', ah),	# /oo/ sound (short oo)
 		#long_vowels
-			('ai', 'eigh', 'ay', 'a-e')						: ('ie-', newV[0]),  # /ā/ sound
-			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay-', newV[1]),  # /ē/ sound
-			('igh', 'i-e')									: ('ew-', newV[2]),  # /ī/ sound
-			('oa', 'o-e', 'ow')								: ('ī-', newV[3]),	# /ō/ sound
-			('ew')											: ('oy-', newV[4]),  # /ü/ sound
-			('oi', 'oy', 'uoy')								: ('ō-', newV[5]),  # /oi/ sound
+			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),  # /ā/ sound
+			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[1]),  # /ē/ sound
+			('igh', 'i-e')									: ('ew', newV[2]),  # /ī/ sound
+			('oa', 'o-e', 'ow')								: ('ī', newV[3]),	# /ō/ sound
+			('ew')											: ('oy', newV[4]),  # /ü/ sound
+			('oi', 'oy', 'uoy')								: ('ō', newV[5]),  # /oi/ sound
 		#special chars
 			' '	: (' ', space),												
 		}
@@ -173,6 +173,7 @@ class UI(QMainWindow):
 	# Constructs a pixpam of the conversion from ConvertedList
 	def letterDisplay(self, convertedList):
 		# Set up an empty pixmap to paint the images
+
 		for pair in convertedList:
 			if pair[1].isNull():
 				print(f"Error: One of the pixmaps is null! Pair: {pair}")
@@ -183,6 +184,8 @@ class UI(QMainWindow):
 		for pair in convertedList:
 			width += pair[1].width()-padding
 			height = max(height, pair[1].height())
+
+		height = height + 45
 
 		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
@@ -197,11 +200,18 @@ class UI(QMainWindow):
 			print("Failed to initialize QPainter")
 			return
 
+		font = painter.font();
+		font.setPixelSize(48);
+		painter.setFont(font);
+
 		# Paint the proper images
 		width = 0
 		for pair in convertedList:
-			painter.drawPixmap(width, 0, pair[1])
-			width += pair[1].width()-padding
+			pairWidth = pair[1].width() - padding
+			spacer = width + pairWidth // 2 
+			painter.drawPixmap(width, 45, pair[1])
+			painter.drawText(spacer, 35, pair[0])
+			width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
 
