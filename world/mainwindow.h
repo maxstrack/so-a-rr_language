@@ -62,7 +62,6 @@ public:
 
 private slots:
     void on_engOut_textChanged();
-
 private:
     Ui::MainWindow *ui;
 };
