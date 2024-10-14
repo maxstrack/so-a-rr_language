@@ -21,6 +21,7 @@ class UI(QMainWindow):
 		
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
+		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m sh w ng z n ch s d a ai e ea i igh o oa u ew oo oi b"))
 
 	def initVariables(self):
 		ah = QPixmap("../../letters/ah.png")
@@ -95,9 +96,9 @@ class UI(QMainWindow):
 		# vowels
 			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
 			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a', a),  # /e/ sound
-			('i', 'ie', 'u', 'ui')							: ('u', u),  # /i/ sound
+			('i', 'ie', 'u', 'ui')							: ('uh', u),  # /i/ sound
 			('o', 'ho', 'y')								: ('i', i),  # /o/,/y/ sound
-			('u')											: ('uh', oo),	# /u/ sound
+			('u')											: ('ou', oo),	# /u/ sound
 			('oo', 'ou')									: ('ah', ah),	# /oo/ sound (short oo)
 		#long_vowels
 			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),  # /ā/ sound
@@ -162,17 +163,13 @@ class UI(QMainWindow):
 
 		self.zenOut.setText(zenWord)
 
-		if not self.graphicsView.scene():
-			scene = QGraphicsScene(self)
-			self.graphicsView.setScene(scene)
-		else:
-			self.graphicsView.scene().clear()
-	
 		self.letterDisplay(convertedList)
 
 	# Constructs a pixpam of the conversion from ConvertedList
 	def letterDisplay(self, convertedList):
 		# Set up an empty pixmap to paint the images
+		scene = QGraphicsScene(self)
+		self.graphicsView.setScene(scene)
 
 		for pair in convertedList:
 			if pair[1].isNull():
@@ -185,7 +182,7 @@ class UI(QMainWindow):
 			width += pair[1].width()-padding
 			height = max(height, pair[1].height())
 
-		height = height + 45
+		height = height + 60
 
 		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
@@ -209,8 +206,8 @@ class UI(QMainWindow):
 		for pair in convertedList:
 			pairWidth = pair[1].width() - padding
 			spacer = width + pairWidth // 2 
-			painter.drawPixmap(width, 45, pair[1])
-			painter.drawText(spacer, 35, pair[0])
+			painter.drawPixmap(width, 60, pair[1])
+			painter.drawText(spacer, 40, pair[0])
 			width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
