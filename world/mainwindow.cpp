@@ -82,23 +82,23 @@ void MainWindow::convert(){
 }
 
 void MainWindow::letterDisplay(const QList<QString> &eng) {
-	const QPixmap a("./letters/a.png");
-	const QPixmap eh("./letters/eh.png");
-	const QPixmap f("./letters/f.png");
-	const QPixmap i("./letters/i.png");
-	const QPixmap k("./letters/k.png");
-	const QPixmap l("./letters/l.png");
-	const QPixmap m("./letters/m.png");
-	const QPixmap n("./letters/n.png");
-	const QPixmap o("./letters/o.png");
-	const QPixmap rr("./letters/rr.png");
-	const QPixmap s("./letters/s.png");
-	const QPixmap sh("./letters/sh.png");
-	const QPixmap t("./letters/t.png");
-	const QPixmap th("./letters/th.png");
-	const QPixmap uh("./letters/uh.png");
-	const QPixmap v("./letters/v.png");
-	const QPixmap z("./letters/z.png");
+	const QPixmap a("../world/letters/a.png");
+	const QPixmap eh("../world/letters/eh.png");
+	const QPixmap f("../world/letters/f.png");
+	const QPixmap i("../world/letters/i.png");
+	const QPixmap k("../world/letters/k.png");
+	const QPixmap l("../world/letters/l.png");
+	const QPixmap m("../world/letters/m.png");
+	const QPixmap n("../world/letters/n.png");
+	const QPixmap o("../world/letters/o.png");
+	const QPixmap rr("../world/letters/rr.png");
+	const QPixmap s("../world/letters/s.png");
+	const QPixmap sh("../world/letters/sh.png");
+	const QPixmap t("../world/letters/t.png");
+	const QPixmap th("../world/letters/th.png");
+	const QPixmap uh("../world/letters/uh.png");
+	const QPixmap v("../world/letters/v.png");
+	const QPixmap z("../world/letters/z.png");
 
 	const QList imgList = {a,z,eh,i,uh,rr,n,s,l,v,t,m,o,th,k,sh,f};
 

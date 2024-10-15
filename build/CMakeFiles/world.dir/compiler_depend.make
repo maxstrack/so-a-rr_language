@@ -918,7 +918,9 @@ CMakeFiles/world.dir/mainwindow.cpp.o: /home/maximilian/Programs/theWorld/so-a-r
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSplitter \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h
 
 CMakeFiles/world.dir/world_autogen/mocs_compilation.cpp.o: world_autogen/mocs_compilation.cpp \
   /usr/include/stdc-predef.h \
@@ -1351,6 +1353,10 @@ CMakeFiles/world.dir/world_autogen/mocs_compilation.cpp.o: world_autogen/mocs_co
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QDebug \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qdebug.h
 
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h:
 

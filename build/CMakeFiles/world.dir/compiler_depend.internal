@@ -921,6 +921,8 @@ CMakeFiles/world.dir/mainwindow.cpp.o
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSplitter
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h
 
 CMakeFiles/world.dir/world_autogen/mocs_compilation.cpp.o
  /home/maximilian/Programs/theWorld/so-a-rr_language/build/world_autogen/mocs_compilation.cpp
