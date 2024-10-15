@@ -1,0 +1,37 @@
+		initialData = {
+		# consonants
+			('d', 'dd', 'ed')								: ('v-',),  # /d/ sound
+			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s-',),  # /k/ sound
+			('l', 'll', 'b', 'bb')							: ('t-',),  # /l/,/b/ sound
+			('n', 'nn', 'kn', 'gn', 'pn')					: ('rr-',),  # /n/ sound
+			('r', 'rr', 'wr', 'rh')							: ('l-',),  # /r/ sound
+			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('f-',),  # /s/ sound
+			('t', 'tt', 'p', 'pp')							: ('z-',),  # /t/,/p/ sound
+			('z', 'se', 'ss', 'ze')							: ('ch-',),  # /z/ sound
+			('v', 'ph', 've')								: ('k-',),  # /v/ sound
+		# digraphs
+			('j', 'ge', 'dge', 'di', 'gg')					: ('zh-',),  # /j/ sound
+			('ch', 'tch', 'tu','te')						: ('d-',),  # /ch/ sound
+			('sh', 'sci', 'ti', 'ci')						: ('n-',),  # /sh/ sound
+			('th')										: ('KH-',),  # /th/ sound (feather)
+			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh-',),  # /f/ sound
+			('w', 'wh', 'h','m', 'mm', 'mb', 'mn', 'lm')	: ('th-',),  # /w/,/m/,/h/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('w-',),  # /ng/,/g/ sound
+		# vowels
+			('a', 'ai', 'ea', 'u', 'ie')					: ('e-',),  # /a/ sound (short a)
+			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a-',),  # /e/ sound
+			('i', 'ie', 'u', 'ui')							: ('u-',),  # /i/ sound
+			('o', 'ho', 'y')								: ('i-',),  # /o/,/y/ sound
+			('u')										: ('oo-',),  # /u/ sound
+			('oo', 'ou')									: ('ah-',),  # /oo/ sound (short oo)
+		#long_vowels
+			('ai', 'eigh', 'ay', 'a-e')						: ('ie-',),  # /ā/ sound
+			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay-',),  # /ē/ sound
+			('igh', 'i-e')									: ('ew-',),  # /ī/ sound
+			('oa', 'o-e', 'ow')								: ('ī-',),  # /ō/ sound
+			('ew')										: ('oy-',),  # /ü/ sound
+			('oi', 'oy', 'uoy')								: ('ow-',),  # /oi/ sound
+		#special chars
+			' '	: (' ',),								
+		}
+

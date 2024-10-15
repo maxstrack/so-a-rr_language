@@ -1,0 +1,60 @@
+Consonants:
+
+    /b/ – b (ball), bb (ribbon)
+    /d/ – d (dog), dd (add), ed (filled)
+    /f/ – f (fan), ff (cliff), ph (phone), gh (laugh), lf (calf), ft (often)
+    /g/ – g (grapes), gg (egg), gh (ghost), gu (guest), gue (catalogue)
+    /h/ – h (hat), wh (who)
+    /j/ – j (jellyfish), ge (cage), g (giraffe), dge (edge), di (soldier), gg (exaggerate)
+    /k/ – c (cat), k (kite), q(u) (queen), ck (back), x (box), lk (folk), qu (bouquet)
+    /l/ – l (leaf), ll (spell)
+    /m/ – m (monkey), mm (summer), mb (climb), mn (autumn), lm (palm)
+    /n/ – n (nest), nn (funny), kn (knight), gn (gnat), pn (pneumonia)
+    /ng/ – ng (ring), n (sink), ngue (tongue)
+    /p/ – p (pig), pp (happy)
+    /r/ – r (robot), rr (carrot), wr (wrong), rh (rhyme)
+    /s/ – s (sun), ss (mess), c (circus), ce (rice), se (horse), sc (science), ps (psychology), st (listen)
+    /t/ – t (tap), tt (batter), th (Thomas), ed (tapped)
+    /v/ – v (van), f (of), ph (Stephen), ve (five)
+    /w/ – w (web), wh (why), u (quick), o (choir)
+    /y/ – y (yo-yo), i (opinion), j (hallelujah)
+    /z/ – z (zebra), se (cheese), s (has), ss (scissors), x (xylophone), ze (maze)
+
+Digraphs:
+
+    /zh/ – s (treasure), si (division), z (azure)
+    /ch/ – ch (cheese), tch (watch), tu (future), ti (question), te (righteous)
+    /sh/ – sh (shark), sci (conscience), ti (station), ci (special), si (tension), ch (machine)
+    /th/ (unvoiced) – th (thongs)
+    /th/ (voiced) – th (feather)
+
+Vowels:
+
+    /a/ – a (cat), ai (plaid), ea (bread), u (bury), ie (friend), ai (said)
+    /e/ – e (egg), eo (leopard), ei (heifer), ae (aesthetic), ay (say), a (many)
+    /i/ – i (igloo), ie (sieve), o (women), u (busy), ui (build), y (hymn)
+    /o/ – o (orange), a (swan), ho (honest)
+    /u/ – u (mug), o (monkey), oo (flood), ou (trouble)
+    /oo/ – oo (book), u (bush), ou (could), o (wolf)
+
+Long Vowels:
+
+    /ā/ – a (baby), ai (snail), eigh (weigh), ay (hay), a-e (cake)
+    /ē/ – e (me), ea (seat), ee (bee), ie (brief), ei (receive), y (fly)
+    /ī/ – i (spider), igh (night), i-e (kite)
+    /ō/ – o (open), oa (boat), o-e (bone), ow (low)
+    /ü/ – u (flute), oo (moon), ew (few)
+
+Dipthongs:
+
+    /oi/ – oi (coin), oy (boy), uoy (buoy)
+    /ow/ – ow (cow), ou (shout)
+
+'R' Controlled Vowels:
+
+    /ã/ – air (chair), are (square)
+    /ä/ – ar (car), ear (heart)
+    /û/ – ir (bird), ur (burn), or (word)
+    /ô/ – aw (paw), or (fork), oar (board)
+    /ēә/ – ear (ear), eer (steer), ere (here)
+    /üә/ – ure (cure), our (tourist)

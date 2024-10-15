@@ -1,0 +1,53 @@
+Consonants:
+
+    /d/ – d (dog), dd (add), ed (filled)
+    /k/ – c (cat), k (kite), q(u) (queen), ck (back), x (box), lk (folk), qu (bouquet)
+    /l/ – l (leaf), ll (spell)
+    /n/ – n (nest), nn (funny), kn (knight), gn (gnat), pn (pneumonia)
+    /r/ – r (robot), rr (carrot), wr (wrong), rh (rhyme)
+    /s/ – s (sun), ss (mess), c (circus), ce (rice), se (horse), sc (science), ps (psychology), st (listen)
+    /t/ – t (tap), tt (batter), th (Thomas), ed (tapped)
+    /z/ – z (zebra), se (cheese), s (has), ss (scissors), x (xylophone), ze (maze)
+    /v/ – v (van), f (of), ph (Stephen), ve (five)
+
+Digraphs:
+
+    /zh/ – s (treasure), si (division), z (azure)
+    /ch/ – ch (cheese), tch (watch), tu (future), ti (question), te (righteous)
+    /sh/ – sh (shark), sci (conscience), ti (station), ci (special), si (tension), ch (machine)
+    /th/ – th (feather)
+    /f/ – f (fan), ff (cliff), ph (phone), gh (laugh), lf (calf), ft (often)
+    /w/ – w (web), wh (why), u (quick), o (choir)
+    /ng/ – ng (ring), n (sink), ngue (tongue)
+
+Vowels:
+
+    /a/ – a (cat), ai (plaid), ea (bread), u (bury), ie (friend), ai (said)
+    /e/ – e (egg), eo (leopard), ei (heifer), ae (aesthetic), ay (say), a (many)
+    /i/ – i (igloo), ie (sieve), o (women), u (busy), ui (build), y (hymn)
+    ah /o/ – o (orange), a (swan), ho (honest) 
+    /u/ – u (mug), o (monkey), oo (flood), ou (trouble)
+    /oo/ – oo (book), u (bush), ou (could), o (wolf)
+
+Long Vowels:
+
+    /ā/ – a (baby), ai (snail), eigh (weigh), ay (hay), a-e (cake)
+    /ē/ – e (me), ea (seat), ee (bee), ie (brief), ei (receive), y (fly)
+    /ī/ – i (spider), igh (night), i-e (kite)
+    /ō/ – o (open), oa (boat), o-e (bone), ow (low)
+    /ü/ – u (flute), oo (moon), ew (few)
+
+Dipthongs:
+
+    /oi/ – oi (coin), oy (boy), uoy (buoy)
+    /ow/ – ow (cow), ou (shout)
+
+Excluded:
+
+    /p/ – p (pig), pp (happy)
+    /m/ – m (monkey), mm (summer), mb (climb), mn (autumn), lm (palm)
+    /b/ – b (ball), bb (ribbon)
+    /g/ – g (grapes), gg (egg), gh (ghost), gu (guest), gue (catalogue)
+    /h/ – h (hat), wh (who)
+    /j/ – j (jellyfish), ge (cage), g (giraffe), dge (edge), di (soldier), gg (exaggerate)
+	/y/ – y (yo-yo), i (opinion), j (hallelujah)
