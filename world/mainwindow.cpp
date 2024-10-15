@@ -73,7 +73,7 @@ void MainWindow::convert(){
 		}
 		zenWord.replace(zenWord.length()-1,1,"	");
 	}
-	zenWord.chop(2);
+	zenWord.chop(1);
 	ui->zenOut->setText(zenWord);
 	// letters display
 	if (ui->graphicsView->scene())
