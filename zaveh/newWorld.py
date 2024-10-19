@@ -79,18 +79,18 @@ class UI(QMainWindow):
 			('t', 'tt', 'th')								: ('z', z),  # /t/,/th/ sound
 			('l', 'll', 'p', 'pp')							: ('t', t),  # /l/,/p/ sound
 			('w', 'wh', 'h')								: ('n', n),  # /w/,/h/ sound
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('k', k),  # /ng/,/g/ sound
-			('v', 'ph', 've')								: ('h', w),  # /v/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('k', k),  # /ng/,/g/ sound
+			('v', 'ph',)									: ('h', w),  # /v/ sound
 			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr', rr),	# /n/ sound
 			('r', 'rr', 'wr', 'rh')							: ('l', l),  # /r/ sound
-			('ch', 'tch', 'tu','te')						: ('d', d),  # /ch/ sound
-			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('v', v),  # /s/ sound
+			('ch', 'tch')									: ('d', d),  # /ch/ sound
+			('s', 'sc', 'ps', 'st')							: ('v', v),  # /s/ sound
 			('d', 'dd', 'ed')								: ('f', f),  # /d/ sound
 		# digraphs
 			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),  # /f/ sound
-			('j', 'ge', 'dge', 'di', 'gg')					: ('zh', newC[1]),  # /j/ sound
+			('j', 'ge', 'dge', 'gg')						: ('zh', newC[1]),  # /j/ sound
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),  # /m/ sound
-			('sh', 'sci', 'ci')								: ('ng', newC[3]),  # /sh/ sound
+			('sh', 'sci')									: ('ng', newC[3]),  # /sh/ sound
 			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),  # /z/ sound
 			('b', 'bb')										: ('KH', KA),	# /b/
 		# vowels
