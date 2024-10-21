@@ -3,7 +3,7 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRectF
 import numpy as np
 import qdarkgraystyle
 
@@ -22,6 +22,8 @@ class UI(QMainWindow):
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
 		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v n r ch s d a ai e ea i igh o oa u ew oo oi b "))
+		self.menuSaveImage.triggered.connect(self.savePixmap)
+		self.menuEnunciation.triggered.connect(self.savePixmap)
 
 	def initVariables(self):
 		ah = QPixmap("../letters/ah.png")
@@ -87,11 +89,11 @@ class UI(QMainWindow):
 			('s', 'sc', 'ps', 'st')							: ('v', v),  # /s/ sound
 			('d', 'dd', 'ed')								: ('f', f),  # /d/ sound
 		# digraphs
-			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),  # /f/ sound
-			('j', 'ge', 'dge', 'gg')						: ('zh', newC[1]),  # /j/ sound
-			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),  # /m/ sound
-			('sh', 'sci')									: ('ng', newC[3]),  # /sh/ sound
-			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),  # /z/ sound
+			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),	# /f/ sound
+			('j', 'ge', 'dge', 'gg')						: ('zh', newC[1]),	# /j/ sound
+			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),	# /m/ sound
+			('sh', 'sci')									: ('ng', newC[3]),	# /sh/ sound
+			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),	# /z/ sound
 			('b', 'bb')										: ('KH', KA),	# /b/
 		# vowels
 			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
@@ -101,11 +103,11 @@ class UI(QMainWindow):
 			('u')											: ('ou', oo),	# /u/ sound
 			('oo', 'ou')									: ('ah', ah),	# /oo/ sound (short oo)
 		#long_vowels
-			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),  # /ā/ sound
-			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[1]),  # /ē/ sound
-			('igh', 'i-e')									: ('ew', newV[2]),  # /ī/ sound
+			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),	# /ā/ sound
+			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[1]),	# /ē/ sound
+			('igh', 'i-e')									: ('ew', newV[2]),	# /ī/ sound
 			('oa', 'o-e', 'ow')								: ('ī', newV[3]),	# /ō/ sound
-			('ew')											: ('oy', newV[4]),  # /ü/ sound
+			('ew')											: ('oy', newV[4]),	# /ü/ sound
 			('oi', 'oy', 'uoy')								: ('ō', newV[5]),  # /oi/ sound
 		#special chars
 			' '	: (' ', space),												
@@ -152,6 +154,24 @@ class UI(QMainWindow):
 	
 		return QPixmap.fromImage(image)
 
+	# Saved the rendered image as a png
+	def savePixmap(self):
+		# Makes the file
+		name = self.engOut.toPlainText()
+		name = name.replace(" ","_")
+		f = "../savedWords/" + name + ".png"
+
+		# Gets the pixmap
+		scene = self.graphicsView.scene()
+		sceneRect = scene.sceneRect()
+		pixmap = QPixmap(sceneRect.size().toSize())
+		pixmap.fill(Qt.transparent)
+		painter = QPainter(pixmap)
+		scene.render(painter, QRectF(pixmap.rect()), sceneRect)
+		painter.end()
+
+		# Saves the image
+		pixmap.save(f)
 
 	# Converts the english to zentil and calls letterDisplay
 	def convert(self):
@@ -189,7 +209,6 @@ class UI(QMainWindow):
 		#print(f"Final width: {width}, height: {height}")
 
 		if disp.isNull():
-			print("Error: Disp QPixmap is null!")
 			return
 
 		painter = QPainter()

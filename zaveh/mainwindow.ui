@@ -73,12 +73,24 @@
     </property>
     <addaction name="allLetters"/>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="menuSaveImage"/>
+   </widget>
    <addaction name="menuAction"/>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="allLetters">
    <property name="text">
     <string>Display Letters</string>
+   </property>
+  </action>
+  <action name="menuSaveImage">
+   <property name="text">
+    <string>Save Image</string>
    </property>
   </action>
  </widget>
