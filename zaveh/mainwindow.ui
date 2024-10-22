@@ -72,6 +72,7 @@
      <string>Actions</string>
     </property>
     <addaction name="allLetters"/>
+    <addaction name="menuEnunciation"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -91,6 +92,11 @@
   <action name="menuSaveImage">
    <property name="text">
     <string>Save Image</string>
+   </property>
+  </action>
+  <action name="menuEnunciation">
+   <property name="text">
+    <string>Display Enunciation</string>
    </property>
   </action>
  </widget>

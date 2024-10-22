@@ -23,7 +23,7 @@ class UI(QMainWindow):
 		self.engOut.textChanged.connect(self.convert)
 		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v n r ch s d a ai e ea i igh o oa u ew oo oi b "))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
-		self.menuEnunciation.triggered.connect(self.savePixmap)
+		self.menuEnunciation.triggered.connect(self.changeEnunc)
 
 	def initVariables(self):
 		ah = QPixmap("../letters/ah.png")
@@ -116,6 +116,9 @@ class UI(QMainWindow):
 		# Make a new Dictionary using AliasDict
 		self.convertDict = AliasDict(initialData)
 
+		# bool for Enunciation
+		self.enuncBool = True
+
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
 		newMaps = []
@@ -135,6 +138,10 @@ class UI(QMainWindow):
 			painter.end()
 			newMaps.append(newMap)
 		return newMaps
+
+	def changeEnunc(self):
+			self.enuncBool = not self.enuncBool
+			self.convert()
 
 	def replaceImageColor(self, pixmap):
 		image = pixmap.toImage()
@@ -173,6 +180,8 @@ class UI(QMainWindow):
 		# Saves the image
 		pixmap.save(f)
 
+		print("Image Saved")
+
 	# Converts the english to zentil and calls letterDisplay
 	def convert(self):
 		engWord = self.engOut.toPlainText().lower()
@@ -202,7 +211,8 @@ class UI(QMainWindow):
 			width += pair[1].width()-padding
 			height = max(height, pair[1].height())
 
-		height = height + 60
+		if (self.enuncBool == True):
+			height = height + 60
 
 		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
@@ -224,9 +234,12 @@ class UI(QMainWindow):
 		width = 0
 		for pair in convertedList:
 			pairWidth = pair[1].width() - padding
-			spacer = width + pairWidth // 2 
-			painter.drawPixmap(width, 60, pair[1])
-			painter.drawText(spacer, 40, pair[0])
+			if (self.enuncBool == True):
+				spacer = width + pairWidth // 2 
+				painter.drawPixmap(width, 60, pair[1])
+				painter.drawText(spacer, 40, pair[0])
+			else:
+				painter.drawPixmap(width, 0, pair[1])
 			width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
