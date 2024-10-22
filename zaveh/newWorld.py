@@ -232,15 +232,19 @@ class UI(QMainWindow):
 
 		# Paint the proper images
 		width = 0
-		for pair in convertedList:
-			pairWidth = pair[1].width() - padding
-			if (self.enuncBool == True):
+		if (self.enuncBool == True):
+			for pair in convertedList:
+				pairWidth = pair[1].width() - padding
 				spacer = width + pairWidth // 2 
 				painter.drawPixmap(width, 60, pair[1])
 				painter.drawText(spacer, 40, pair[0])
-			else:
+				width += pairWidth
+
+		else:
+			for pair in convertedList:
+				pairWidth = pair[1].width() - padding
 				painter.drawPixmap(width, 0, pair[1])
-			width += pairWidth
+				width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
 
