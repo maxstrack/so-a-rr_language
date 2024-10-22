@@ -3,7 +3,7 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRectF
 import numpy as np
 import qdarkgraystyle
 
@@ -21,51 +21,53 @@ class UI(QMainWindow):
 		
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
-		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m sh w ng z n ch s d a ai e ea i igh o oa u ew oo oi b"))
+		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v n r ch s d a ai e ea i igh o oa u ew oo oi b "))
+		self.menuSaveImage.triggered.connect(self.savePixmap)
+		self.menuEnunciation.triggered.connect(self.changeEnunc)
 
 	def initVariables(self):
-		ah = QPixmap("../../letters/ah.png")
-		a = QPixmap("../../letters/a.png")
-		d = QPixmap("../../letters/d.png")
-		e = QPixmap("../../letters/e.png")
-		f = QPixmap("../../letters/f.png")
-		i = QPixmap("../../letters/i.png")
-		k = QPixmap("../../letters/k.png")
-		l = QPixmap("../../letters/l.png")
-		n = QPixmap("../../letters/n.png")
-		oo = QPixmap("../../letters/oo.png")
-		rr = QPixmap("../../letters/rr.png")
-		s = QPixmap("../../letters/s.png")
-		t = QPixmap("../../letters/t.png")
-		u = QPixmap("../../letters/u.png")
-		v = QPixmap("../../letters/v.png")
-		w = QPixmap("../../letters/w.png")
-		z = QPixmap("../../letters/z.png")
-		consonant = QPixmap("../../letters/consonant.png")
-		KA = QPixmap("../../letters/KA.png")
-		space = QPixmap("../../letters/space.png")
-		vowle = QPixmap("../../letters/vowle.png")
-		print("ah  exists: ",os.path.exists("../../letters/ah.png"))
-		print("a exists: ",os.path.exists("../../letters/a.png"))
-		print("d  exists: ",os.path.exists("../../letters/s.png"))
-		print("e  exists: ",os.path.exists("../../letters/e.png"))
-		print("f  exists: ",os.path.exists("../../letters/f.png"))
-		print("i  exists: ",os.path.exists("../../letters/i.png"))
-		print("k  exists: ",os.path.exists("../../letters/k.png"))
-		print("l  exists: ",os.path.exists("../../letters/l.png"))
-		print("n  exists: ",os.path.exists("../../letters/n.png"))
-		print("oo  exists: ",os.path.exists("../../letters/oo.png"))
-		print("rr exists: ",os.path.exists("../../letters/rr.png"))
-		print("s exists: ",os.path.exists("../../letters/s.png"))
-		print("t  exists: ",os.path.exists("../../letters/t.png"))
-		print("u exists: ",os.path.exists("../../letters/u.png"))
-		print("v  exists: ",os.path.exists("../../letters/v.png"))
-		print("w  exists: ",os.path.exists("../../letters/w.png"))
-		print("z  exists: ",os.path.exists("../../letters/z.png"))
-		print("consonant  exists: ",os.path.exists("../../letters/consonant.png"))
-		print("KA  exists: ",os.path.exists("../../letters/KA.png"))
-		print("space  exists: ",os.path.exists("../../letters/space.png"))
-		print("vowle  exists: ",os.path.exists("../../letters/vowle.png"))
+		ah = QPixmap("../letters/ah.png")
+		a = QPixmap("../letters/a.png")
+		d = QPixmap("../letters/d.png")
+		e = QPixmap("../letters/e.png")
+		f = QPixmap("../letters/f.png")
+		i = QPixmap("../letters/i.png")
+		k = QPixmap("../letters/k.png")
+		l = QPixmap("../letters/l.png")
+		n = QPixmap("../letters/n.png")
+		oo = QPixmap("../letters/oo.png")
+		rr = QPixmap("../letters/rr.png")
+		s = QPixmap("../letters/s.png")
+		t = QPixmap("../letters/t.png")
+		u = QPixmap("../letters/u.png")
+		v = QPixmap("../letters/v.png")
+		w = QPixmap("../letters/w.png")
+		z = QPixmap("../letters/z.png")
+		consonant = QPixmap("../letters/consonant.png")
+		KA = QPixmap("../letters/KA.png")
+		space = QPixmap("../letters/space.png")
+		vowle = QPixmap("../letters/vowle.png")
+		print("ah  exists: ",os.path.exists("../letters/ah.png"))
+		print("a exists: ",os.path.exists("../letters/a.png"))
+		print("d  exists: ",os.path.exists("../letters/s.png"))
+		print("e  exists: ",os.path.exists("../letters/e.png"))
+		print("f  exists: ",os.path.exists("../letters/f.png"))
+		print("i  exists: ",os.path.exists("../letters/i.png"))
+		print("k  exists: ",os.path.exists("../letters/k.png"))
+		print("l  exists: ",os.path.exists("../letters/l.png"))
+		print("n  exists: ",os.path.exists("../letters/n.png"))
+		print("oo  exists: ",os.path.exists("../letters/oo.png"))
+		print("rr exists: ",os.path.exists("../letters/rr.png"))
+		print("s exists: ",os.path.exists("../letters/s.png"))
+		print("t  exists: ",os.path.exists("../letters/t.png"))
+		print("u exists: ",os.path.exists("../letters/u.png"))
+		print("v  exists: ",os.path.exists("../letters/v.png"))
+		print("w  exists: ",os.path.exists("../letters/w.png"))
+		print("z  exists: ",os.path.exists("../letters/z.png"))
+		print("consonant  exists: ",os.path.exists("../letters/consonant.png"))
+		print("KA  exists: ",os.path.exists("../letters/KA.png"))
+		print("space  exists: ",os.path.exists("../letters/space.png"))
+		print("vowle  exists: ",os.path.exists("../letters/vowle.png"))
 
 		# Make Lists of the new consonant and vowle pixmaps
 		consonants = [s, z, t, n, k]
@@ -79,19 +81,19 @@ class UI(QMainWindow):
 			('t', 'tt', 'th')								: ('z', z),  # /t/,/th/ sound
 			('l', 'll', 'p', 'pp')							: ('t', t),  # /l/,/p/ sound
 			('w', 'wh', 'h')								: ('n', n),  # /w/,/h/ sound
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue', 'gu')	: ('k', k),  # /ng/,/g/ sound
-			('v', 'ph', 've')								: ('h', w),  # /v/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('k', k),  # /ng/,/g/ sound
+			('v', 'ph',)									: ('h', w),  # /v/ sound
 			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr', rr),	# /n/ sound
 			('r', 'rr', 'wr', 'rh')							: ('l', l),  # /r/ sound
-			('ch', 'tch', 'tu','te')						: ('d', d),  # /ch/ sound
-			('s', 'ce', 'se', 'sc', 'ps', 'st')				: ('v', v),  # /s/ sound
+			('ch', 'tch')									: ('d', d),  # /ch/ sound
+			('s', 'sc', 'ps', 'st')							: ('v', v),  # /s/ sound
 			('d', 'dd', 'ed')								: ('f', f),  # /d/ sound
 		# digraphs
-			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),  # /f/ sound
-			('j', 'ge', 'dge', 'di', 'gg')					: ('zh', newC[1]),  # /j/ sound
-			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),  # /m/ sound
-			('sh', 'sci', 'ti', 'ci')						: ('ng', newC[3]),  # /sh/ sound
-			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),  # /z/ sound
+			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),	# /f/ sound
+			('j', 'ge', 'dge', 'gg')						: ('zh', newC[1]),	# /j/ sound
+			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),	# /m/ sound
+			('sh', 'sci')									: ('ng', newC[3]),	# /sh/ sound
+			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),	# /z/ sound
 			('b', 'bb')										: ('KH', KA),	# /b/
 		# vowels
 			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
@@ -101,11 +103,11 @@ class UI(QMainWindow):
 			('u')											: ('ou', oo),	# /u/ sound
 			('oo', 'ou')									: ('ah', ah),	# /oo/ sound (short oo)
 		#long_vowels
-			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),  # /ā/ sound
-			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[1]),  # /ē/ sound
-			('igh', 'i-e')									: ('ew', newV[2]),  # /ī/ sound
+			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),	# /ā/ sound
+			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[1]),	# /ē/ sound
+			('igh', 'i-e')									: ('ew', newV[2]),	# /ī/ sound
 			('oa', 'o-e', 'ow')								: ('ī', newV[3]),	# /ō/ sound
-			('ew')											: ('oy', newV[4]),  # /ü/ sound
+			('ew')											: ('oy', newV[4]),	# /ü/ sound
 			('oi', 'oy', 'uoy')								: ('ō', newV[5]),  # /oi/ sound
 		#special chars
 			' '	: (' ', space),												
@@ -113,6 +115,9 @@ class UI(QMainWindow):
 
 		# Make a new Dictionary using AliasDict
 		self.convertDict = AliasDict(initialData)
+
+		# bool for Enunciation
+		self.enuncBool = True
 
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
@@ -134,6 +139,10 @@ class UI(QMainWindow):
 			newMaps.append(newMap)
 		return newMaps
 
+	def changeEnunc(self):
+			self.enuncBool = not self.enuncBool
+			self.convert()
+
 	def replaceImageColor(self, pixmap):
 		image = pixmap.toImage()
 		image = image.convertToFormat(QImage.Format_RGBA8888)
@@ -152,6 +161,26 @@ class UI(QMainWindow):
 	
 		return QPixmap.fromImage(image)
 
+	# Saved the rendered image as a png
+	def savePixmap(self):
+		# Makes the file
+		name = self.engOut.toPlainText()
+		name = name.replace(" ","_")
+		f = "../savedWords/" + name + ".png"
+
+		# Gets the pixmap
+		scene = self.graphicsView.scene()
+		sceneRect = scene.sceneRect()
+		pixmap = QPixmap(sceneRect.size().toSize())
+		pixmap.fill(Qt.transparent)
+		painter = QPainter(pixmap)
+		scene.render(painter, QRectF(pixmap.rect()), sceneRect)
+		painter.end()
+
+		# Saves the image
+		pixmap.save(f)
+
+		print("Image Saved")
 
 	# Converts the english to zentil and calls letterDisplay
 	def convert(self):
@@ -182,14 +211,14 @@ class UI(QMainWindow):
 			width += pair[1].width()-padding
 			height = max(height, pair[1].height())
 
-		height = height + 60
+		if (self.enuncBool == True):
+			height = height + 60
 
 		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
 		#print(f"Final width: {width}, height: {height}")
 
 		if disp.isNull():
-			print("Error: Disp QPixmap is null!")
 			return
 
 		painter = QPainter()
@@ -205,9 +234,12 @@ class UI(QMainWindow):
 		width = 0
 		for pair in convertedList:
 			pairWidth = pair[1].width() - padding
-			spacer = width + pairWidth // 2 
-			painter.drawPixmap(width, 60, pair[1])
-			painter.drawText(spacer, 40, pair[0])
+			if (self.enuncBool == True):
+				spacer = width + pairWidth // 2 
+				painter.drawPixmap(width, 60, pair[1])
+				painter.drawText(spacer, 40, pair[0])
+			else:
+				painter.drawPixmap(width, 0, pair[1])
 			width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
