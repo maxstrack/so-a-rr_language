@@ -73,6 +73,7 @@
     </property>
     <addaction name="allLetters"/>
     <addaction name="menuEnunciation"/>
+    <addaction name="menuChangeColor"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -80,8 +81,8 @@
     </property>
     <addaction name="menuSaveImage"/>
    </widget>
-   <addaction name="menuAction"/>
    <addaction name="menuFile"/>
+   <addaction name="menuAction"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="allLetters">
@@ -97,6 +98,11 @@
   <action name="menuEnunciation">
    <property name="text">
     <string>Display Enunciation</string>
+   </property>
+  </action>
+  <action name="menuChangeColor">
+   <property name="text">
+    <string>Change Letter Color</string>
    </property>
   </action>
  </widget>
