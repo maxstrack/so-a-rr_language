@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QMainWindow, QGraphicsScene
+from PyQt5.QtWidgets import QMainWindow, QGraphicsScene, QColorDialog
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage
 from PyQt5.QtCore import Qt, QRectF
 import numpy as np
@@ -24,6 +24,7 @@ class UI(QMainWindow):
 		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v n r ch s d a ai e ea i igh o oa u ew oo oi b "))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
 		self.menuEnunciation.triggered.connect(self.changeEnunc)
+		self.menuChangeColor.triggered.connect(self.changeImageColor)
 
 	def initVariables(self):
 		ah = QPixmap("../letters/ah.png")
@@ -119,6 +120,9 @@ class UI(QMainWindow):
 		# bool for Enunciation
 		self.enuncBool = True
 
+		# Color for letter font
+		self.color = QColor("white")
+
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
 		newMaps = []
@@ -139,15 +143,22 @@ class UI(QMainWindow):
 			newMaps.append(newMap)
 		return newMaps
 
+	# changes the enuncBool and re-calls convert
+	# Effectivly changing the setting
 	def changeEnunc(self):
 			self.enuncBool = not self.enuncBool
 			self.convert()
 
+	# Replace the non-transparent pixels with a color
 	def replaceImageColor(self, pixmap):
 		image = pixmap.toImage()
 		image = image.convertToFormat(QImage.Format_RGBA8888)
 		width = image.width()
 		height = image.height()
+
+		red = self.color.red()
+		green = self.color.green()
+		blue = self.color.blue()
 	
 		# Get the image as a buffer of bytes
 		ptr = image.bits()
@@ -157,10 +168,15 @@ class UI(QMainWindow):
 		arr = np.frombuffer(ptr, np.uint8).reshape((height, width, 4))
 	
 		# Only modify pixels with non-zero alpha
-		arr[arr[:, :, 3] > 0] = [255, 255, 255, 255] # white
+		arr[arr[:, :, 3] > 0] = [red, green, blue, 255] # white
 	
 		return QPixmap.fromImage(image)
 
+	# Get color and change the font color
+	def changeImageColor(self):
+		self.color = QColorDialog.getColor()
+		self.convert()
+		
 	# Saved the rendered image as a png
 	def savePixmap(self):
 		# Makes the file
@@ -232,15 +248,19 @@ class UI(QMainWindow):
 
 		# Paint the proper images
 		width = 0
-		for pair in convertedList:
-			pairWidth = pair[1].width() - padding
-			if (self.enuncBool == True):
+		if (self.enuncBool == True):
+			for pair in convertedList:
+				pairWidth = pair[1].width() - padding
 				spacer = width + pairWidth // 2 
 				painter.drawPixmap(width, 60, pair[1])
 				painter.drawText(spacer, 40, pair[0])
-			else:
+				width += pairWidth
+
+		else:
+			for pair in convertedList:
+				pairWidth = pair[1].width() - padding
 				painter.drawPixmap(width, 0, pair[1])
-			width += pairWidth
+				width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
 
