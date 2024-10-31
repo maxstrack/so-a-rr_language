@@ -21,7 +21,7 @@ class UI(QMainWindow):
 		
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
-		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v n r ch s d a ai e ea i igh o oa u ew oo oi b "))
+		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d a ai e ea i igh o oa u ew oo oi b "))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
 		self.menuEnunciation.triggered.connect(self.changeEnunc)
 		self.menuChangeColor.triggered.connect(self.changeImageColor)
@@ -71,7 +71,7 @@ class UI(QMainWindow):
 		print("vowle  exists: ",os.path.exists("../letters/vowle.png"))
 
 		# Make Lists of the new consonant and vowle pixmaps
-		consonants = [s, z, t, n, k]
+		consonants = [s, z, t, n, k, w]
 		newC = self.paintNewMaps(consonants, consonant) 
 		vowles = [e, a, u, i, oo, ah]
 		newV = self.paintNewMaps(vowles, vowle) 
@@ -95,6 +95,7 @@ class UI(QMainWindow):
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),	# /m/ sound
 			('sh', 'sci')									: ('ng', newC[3]),	# /sh/ sound
 			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),	# /z/ sound
+			('p', 'pp')										: ('w', newC[5]),	# /p/ sound
 			('b', 'bb')										: ('KH', KA),	# /b/
 		# vowels
 			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
