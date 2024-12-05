@@ -27,22 +27,22 @@ class UI(QMainWindow):
 		self.menuChangeColor.triggered.connect(self.changeImageColor)
 
 	def initVariables(self):
-		ah = QPixmap("../letters/ah.png")
+		ah = QPixmap("../letters/oo.png")
 		a = QPixmap("../letters/a.png")
 		d = QPixmap("../letters/d.png")
 		e = QPixmap("../letters/e.png")
-		f = QPixmap("../letters/f.png")
+		g = QPixmap("../letters/f.png")
 		i = QPixmap("../letters/i.png")
 		k = QPixmap("../letters/k.png")
 		l = QPixmap("../letters/l.png")
 		n = QPixmap("../letters/n.png")
-		oo = QPixmap("../letters/oo.png")
+		oo = QPixmap("../letters/ah.png")
 		rr = QPixmap("../letters/rr.png")
 		s = QPixmap("../letters/s.png")
 		t = QPixmap("../letters/t.png")
 		u = QPixmap("../letters/u.png")
 		v = QPixmap("../letters/v.png")
-		w = QPixmap("../letters/w.png")
+		h = QPixmap("../letters/w.png")
 		z = QPixmap("../letters/z.png")
 		consonant = QPixmap("../letters/consonant.png")
 		KA = QPixmap("../letters/KA.png")
@@ -71,7 +71,7 @@ class UI(QMainWindow):
 		print("vowle  exists: ",os.path.exists("../letters/vowle.png"))
 
 		# Make Lists of the new consonant and vowle pixmaps
-		consonants = [s, z, t, n, k, w]
+		consonants = [s, n, t, z, k, h, v, g]
 		newC = self.paintNewMaps(consonants, consonant) 
 		vowles = [e, a, u, i, oo, ah]
 		newV = self.paintNewMaps(vowles, vowle) 
@@ -79,28 +79,30 @@ class UI(QMainWindow):
 		initialData = {
 		# consonants
 			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s', s),  # /k/ sound
-			('t', 'tt', 'th')								: ('z', z),  # /t/,/th/ sound
-			('l', 'll', 'p', 'pp')							: ('t', t),  # /l/,/p/ sound
-			('w', 'wh', 'h')								: ('n', n),  # /w/,/h/ sound
+			('t', 'tt')										: ('n', n),  # /t/ sound
+			('l', 'll')										: ('t', t),  # /l/ sound
+			('w', 'wh')										: ('z', z),  # /w/,/h/ sound
 			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('k', k),  # /ng/,/g/ sound
-			('v', 'ph',)									: ('h', w),  # /v/ sound
+			('v', 'ph',)									: ('h', h),  # /v/ sound
+			('s', 'sc', 'ps', 'st')							: ('v', v),  # /s/ sound
+			('h')											: ('g', g),  # /p/ sound
 			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr', rr),	# /n/ sound
 			('r', 'rr', 'wr', 'rh')							: ('l', l),  # /r/ sound
 			('ch', 'tch')									: ('d', d),  # /ch/ sound
-			('s', 'sc', 'ps', 'st')							: ('v', v),  # /s/ sound
-			('d', 'dd', 'ed')								: ('f', f),  # /d/ sound
 		# digraphs
 			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),	# /f/ sound
-			('j', 'ge', 'dge', 'gg')						: ('zh', newC[1]),	# /j/ sound
+			('j', 'ge', 'dge', 'gg')						: ('ng', newC[1]),	# /j/ sound
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),	# /m/ sound
-			('sh', 'sci')									: ('ng', newC[3]),	# /sh/ sound
+			('sh', 'sci')									: ('zh', newC[3]),	# /sh/ sound
 			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),	# /z/ sound
 			('p', 'pp')										: ('w', newC[5]),	# /p/ sound
+			('d', 'dd', 'ed')								: ('f', newC[6]),  # /d/ sound
+			('th')											: ('j', newC[7]),  # /th/ sound
 			('b', 'bb')										: ('KH', KA),	# /b/
 		# vowels
 			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
 			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a', a),  # /e/ sound
-			('i', 'ie', 'u', 'ui')							: ('uh', u),  # /i/ sound
+			('i', 'ie', 'ui')								: ('uh', u),  # /i/ sound
 			('o', 'ho', 'y')								: ('i', i),  # /o/,/y/ sound
 			('u')											: ('ou', oo),	# /u/ sound
 			('oo', 'ou')									: ('ah', ah),	# /oo/ sound (short oo)
