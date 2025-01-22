@@ -21,7 +21,7 @@ class UI(QMainWindow):
 		
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
-		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d a ai e ea i igh o oa u ew oo oi b "))
+		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d h th a ai e ea i igh o oa u ew oo oi b "))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
 		self.menuEnunciation.triggered.connect(self.changeEnunc)
 		self.menuChangeColor.triggered.connect(self.changeImageColor)
