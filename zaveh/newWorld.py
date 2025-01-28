@@ -213,20 +213,10 @@ class UI(QMainWindow):
 
 		self.letterDisplay(convertedList)
 
-	# Constructs a pixpam of the conversion from ConvertedList
-	def letterDisplay(self, convertedList):
-		# Set up an empty pixmap to paint the images
-		scene = QGraphicsScene(self)
-		self.graphicsView.setScene(scene)
-
-		for pair in convertedList:
-			if pair[1].isNull():
-				print(f"Error: One of the pixmaps is null! Pair: {pair}")
-				return
-
+	def getSubPixMap(self, subList):
 		width = 0
 		height = 0
-		for pair in convertedList:
+		for pair in subList:
 			width += pair[1].width()-padding
 			height = max(height, pair[1].height())
 
@@ -252,7 +242,7 @@ class UI(QMainWindow):
 		# Paint the proper images
 		width = 0
 		if (self.enuncBool == True):
-			for pair in convertedList:
+			for pair in subList:
 				pairWidth = pair[1].width() - padding
 				spacer = width + pairWidth // 2 
 				painter.drawPixmap(width, 60, pair[1])
@@ -260,13 +250,26 @@ class UI(QMainWindow):
 				width += pairWidth
 
 		else:
-			for pair in convertedList:
+			for pair in subList:
 				pairWidth = pair[1].width() - padding
 				painter.drawPixmap(width, 0, pair[1])
 				width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
+		return disp
 
+	# Constructs a pixpam of the conversion from ConvertedList
+	def letterDisplay(self, convertedList):
+		# Set up an empty pixmap to paint the images
+		scene = QGraphicsScene(self)
+		self.graphicsView.setScene(scene)
+
+		for pair in convertedList:
+			if pair[1].isNull():
+				print(f"Error: One of the pixmaps is null! Pair: {pair}")
+				return
+
+		disp = self.getSubPixMap(convertedList)
 		disp = self.replaceImageColor(disp)
 
 		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
