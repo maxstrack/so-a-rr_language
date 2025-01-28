@@ -227,9 +227,6 @@ class UI(QMainWindow):
 		disp.fill(Qt.transparent)
 		#print(f"Final width: {width}, height: {height}")
 
-		if disp.isNull():
-			return
-
 		painter = QPainter()
 		if not painter.begin(disp):
 			print("Failed to initialize QPainter")
@@ -263,6 +260,8 @@ class UI(QMainWindow):
 		# Set up an empty pixmap to paint the images
 		scene = QGraphicsScene(self)
 		self.graphicsView.setScene(scene)
+		if not convertedList:
+			return
 
 		for pair in convertedList:
 			if pair[1].isNull():
