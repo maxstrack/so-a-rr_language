@@ -115,7 +115,11 @@ class UI(QMainWindow):
 			('oi', 'oy', 'uoy')								: ('ō', newV[5]),  # /oi/ sound
 		#special chars
 			' '	: (' ', space),												
+			'('	: ('(', space),												
+			')'	: (')', space),												
+			','	: (',', space),												
 		}
+
 
 		# Make a new Dictionary using AliasDict
 		self.convertDict = AliasDict(initialData)
@@ -268,10 +272,31 @@ class UI(QMainWindow):
 				print(f"Error: One of the pixmaps is null! Pair: {pair}")
 				return
 
+		print(self.splitParenth(convertedList))
+
 		disp = self.getSubPixMap(convertedList)
 		disp = self.replaceImageColor(disp)
 
 		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+	
+	# Returns a list of all the parenthisis
+	def splitParenth(self, pList):
+		stack = []
+		matches = []
+
+		for index, (char, _) in enumerate(pList):
+			if char == '(':
+				stack.append(index) 
+			elif char == ')':
+				if stack:
+					leftIndex = stack.pop()
+					matches.append((leftIndex, index))
+
+		return matches
+
+	#def subSplit(self, pList, parenth)
+	#	for pair in reversed(parenth):
+			
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
