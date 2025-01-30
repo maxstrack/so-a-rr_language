@@ -217,7 +217,7 @@ class UI(QMainWindow):
 
 		self.letterDisplay(convertedList)
 
-	def getSubPixMap(self, subList):
+	def getSubPixmap(self, subList):
 		width = 0
 		height = 0
 		for pair in subList:
@@ -259,6 +259,43 @@ class UI(QMainWindow):
 		painter.end()  # Ensure this is called to finish painting
 		return disp
 
+	def addPixmap(self, subList):
+		pixList = []
+		lastIndex = 0
+		for index, (char, _) in enumerate(subList):
+			if char == ',' :
+				pixmap = self.getSubPixmap(subList[lastIndex:index])
+				lastIndex = index+1
+				pixList.append(pixmap)
+
+		if lastIndex != len(subList):
+			pixmap = self.getSubPixmap(subList[lastIndex:len(subList)])
+			pixList.append(pixmap)
+
+		width = 0
+		height = 0
+		for pixmap in pixList:
+			width += pixmap.width()
+			height += pixmap.height()
+
+		disp = QPixmap(width, height)
+		disp.fill(Qt.transparent)
+
+		painter = QPainter()
+		if not painter.begin(disp):
+			print("Failed to initialize QPainter")
+			return
+
+		# Paint the proper images
+		height = 0
+		for pixmap in pixList:
+			pixHeight = pixmap.height()
+			painter.drawPixmap(0, height, pixmap)
+			height += pixHeight
+
+		painter.end()  # Ensure this is called to finish painting
+		return disp
+
 	# Constructs a pixpam of the conversion from ConvertedList
 	def letterDisplay(self, convertedList):
 		# Set up an empty pixmap to paint the images
@@ -272,31 +309,31 @@ class UI(QMainWindow):
 				print(f"Error: One of the pixmaps is null! Pair: {pair}")
 				return
 
-		print(self.splitParenth(convertedList))
+		splitList = self.parse_parentheses(convertedList)
 
-		disp = self.getSubPixMap(convertedList)
+		#disp = self.getSubPixmap(convertedList)
+		disp = self.addPixmap(convertedList)
 		disp = self.replaceImageColor(disp)
 
 		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
 	
-	# Returns a list of all the parenthisis
-	def splitParenth(self, pList):
-		stack = []
-		matches = []
+	def parse_parentheses(self, tuples_list):
+		def helper(index):
+			nested = []
+			while index < len(tuples_list):
+				char, value = tuples_list[index]
+				if char == '(':
+					sublist, index = helper(index + 1)
+					nested.append(sublist)
+				elif char == ')':
+					return nested, index
+				else:
+					nested.append((char, value))
+				index += 1
+			return nested, index
 
-		for index, (char, _) in enumerate(pList):
-			if char == '(':
-				stack.append(index) 
-			elif char == ')':
-				if stack:
-					leftIndex = stack.pop()
-					matches.append((leftIndex, index))
-
-		return matches
-
-	#def subSplit(self, pList, parenth)
-	#	for pair in reversed(parenth):
-			
+		parsed, _ = helper(0)
+		return parsed
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
