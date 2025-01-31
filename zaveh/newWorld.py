@@ -261,7 +261,7 @@ class UI(QMainWindow):
 		painter.end()  # Ensure this is called to finish painting
 		return disp
 
-	def addPixmap(self, pixList):
+	def addPixmapV(self, pixList):
 		if not pixList:
 			return	
 		width = 0
@@ -289,40 +289,62 @@ class UI(QMainWindow):
 		painter.end()  # Ensure this is called to finish painting
 		return disp
 
-	'''
-	def commaPixmap(self, subList)
-		pixList = []
-		lastIndex = 0
-		for index, (char, _) in enumerate(subList):
-			if char == ',' :
-				pixmap = self.getSubPixmap(subList[lastIndex:index])
-				lastIndex = index+1
-				pixList.append(pixmap)
+	def addPixmapH(self, pixList):
+		if not pixList:
+			return	
+		width = 0
+		height = 0
+		for pixmap in pixList:
+			width += pixmap.width()
+			height = max(height, pixmap.height())
 
-		if lastIndex != len(subList):
-			pixmap = self.getSubPixmap(subList[lastIndex:len(subList)])
-			pixList.append(pixmap)
-	'''
+		disp = QPixmap(width, height)
+		disp.fill(Qt.transparent)
+
+		painter = QPainter()
+		if not painter.begin(disp):
+			print("Failed to initialize QPainter")
+			return
+
+		# Paint the proper images
+		width = 0
+		for pixmap in pixList:
+			pixWidth = pixmap.width()
+			placeHeight = (height - pixmap.height())//2
+			painter.drawPixmap(width, placeHeight, pixmap)
+			width += pixWidth
+
+		painter.end()  # Ensure this is called to finish painting
+		return disp
 
 	def getPixmap(self, recList):
 		pixList = []
 		newList = []
-		print(recList)
+		comma = 0
+		#print(recList)
 		for element in recList:
-			print(element)
+			#print(element)
 			if isinstance(element, list):
 				if newList:
 					pixList.append(self.getSubPixmap(newList))
 				if element:
 					pixList.append(self.getPixmap(element))
 				newList = []
-			elif isinstance(element, tuple):
+			elif isinstance(element, tuple) and newList and element[0] == ',':
+				pixList.append(self.getSubPixmap(newList))
+				newList = []
+				comma = 1
+			else:
 				newList.append(element)
 
 		if newList:
 			pixList.append(self.getSubPixmap(newList))
-		print("\n",pixList, "\n")
-		return self.addPixmap(pixList)
+		if comma == 0:
+			disp = self.addPixmapH(pixList)
+		elif comma == 1:
+			disp = self.addPixmapV(pixList)
+		#print("\n",pixList, "\n")
+		return disp 
 
 	# Constructs a pixpam of the conversion from ConvertedList
 	def letterDisplay(self, convertedList):
@@ -341,9 +363,9 @@ class UI(QMainWindow):
 
 		#disp = self.addPixmap(convertedList)
 		disp = self.getPixmap(splitList)
-		disp = self.replaceImageColor(disp)
-
-		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+		if disp:
+			disp = self.replaceImageColor(disp)
+			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
