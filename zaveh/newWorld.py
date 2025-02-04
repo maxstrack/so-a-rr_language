@@ -266,6 +266,7 @@ class UI(QMainWindow):
 			return	
 		width = 0
 		height = 0
+		# get the base size
 		for pixmap in pixList:
 			width = max(width, pixmap.width())
 			height += pixmap.height()
@@ -294,6 +295,7 @@ class UI(QMainWindow):
 			return	
 		width = 0
 		height = 0
+		# get the base size
 		for pixmap in pixList:
 			width += pixmap.width()
 			height = max(height, pixmap.height())
@@ -318,31 +320,33 @@ class UI(QMainWindow):
 		return disp
 
 	def getPixmap(self, recList):
-		#print(recList)
-		#print("\n")
 		pixListV = []
 		pixListH = []
 		newList = []
 		comma = 0
-		#print(recList)
 		for element in recList:
-			#print(element)
+			# for adding pixmaps horisontaly
 			if isinstance(element, list):
 				if newList:
+					# condence individual tupels into a pixmap
 					pixListH.append(self.getSubPixmap(newList))
 				if element:
+					# Called recursivly on subLists
 					pixListH.append(self.getPixmap(element))
 				newList = []
+			# for adding pixmaps verticaly
 			elif isinstance(element, tuple) and newList and element[0] == ',':
+				# Add all horixontal maps and add resulting map to verical list
 				pixListH.append(self.getSubPixmap(newList))
 				pixListV.append(self.addPixmapH(pixListH))
 				newList = []
 				pixListH = []
 				comma = 1
+			# base case
 			else:
 				newList.append(element)
 
-
+		# Catch all remainig elements after last list or comma
 		if newList:
 			pixListH.append(self.getSubPixmap(newList))
 		if pixListH:
@@ -350,8 +354,6 @@ class UI(QMainWindow):
 			pixListV.append(disp)
 		if comma == 1:	
 			disp = self.addPixmapV(pixListV)
-		#print("\n",pixList, "\n")
-		print(pixListV,"\n\n",pixListH,"\n","-------------")
 		return disp 
 
 	# Constructs a pixpam of the conversion from ConvertedList
@@ -374,7 +376,6 @@ class UI(QMainWindow):
 		if disp:
 			disp = self.replaceImageColor(disp)
 			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
-			print("====================================")
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
