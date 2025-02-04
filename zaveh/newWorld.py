@@ -318,7 +318,10 @@ class UI(QMainWindow):
 		return disp
 
 	def getPixmap(self, recList):
-		pixList = []
+		#print(recList)
+		#print("\n")
+		pixListV = []
+		pixListH = []
 		newList = []
 		comma = 0
 		#print(recList)
@@ -326,24 +329,29 @@ class UI(QMainWindow):
 			#print(element)
 			if isinstance(element, list):
 				if newList:
-					pixList.append(self.getSubPixmap(newList))
+					pixListH.append(self.getSubPixmap(newList))
 				if element:
-					pixList.append(self.getPixmap(element))
+					pixListH.append(self.getPixmap(element))
 				newList = []
 			elif isinstance(element, tuple) and newList and element[0] == ',':
-				pixList.append(self.getSubPixmap(newList))
+				pixListH.append(self.getSubPixmap(newList))
+				pixListV.append(self.addPixmapH(pixListH))
 				newList = []
+				pixListH = []
 				comma = 1
 			else:
 				newList.append(element)
 
+
 		if newList:
-			pixList.append(self.getSubPixmap(newList))
-		if comma == 0:
-			disp = self.addPixmapH(pixList)
-		elif comma == 1:
-			disp = self.addPixmapV(pixList)
+			pixListH.append(self.getSubPixmap(newList))
+		if pixListH:
+			disp = self.addPixmapH(pixListH)
+			pixListV.append(disp)
+		if comma == 1:	
+			disp = self.addPixmapV(pixListV)
 		#print("\n",pixList, "\n")
+		print(pixListV,"\n\n",pixListH,"\n","-------------")
 		return disp 
 
 	# Constructs a pixpam of the conversion from ConvertedList
@@ -366,6 +374,7 @@ class UI(QMainWindow):
 		if disp:
 			disp = self.replaceImageColor(disp)
 			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+			print("====================================")
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
