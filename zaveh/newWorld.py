@@ -48,6 +48,7 @@ class UI(QMainWindow):
 		KA = QPixmap("../letters/KA.png")
 		space = QPixmap("../letters/space.png")
 		vowle = QPixmap("../letters/vowle.png")
+		'''
 		print("ah  exists: ",os.path.exists("../letters/ah.png"))
 		print("a exists: ",os.path.exists("../letters/a.png"))
 		print("d  exists: ",os.path.exists("../letters/s.png"))
@@ -69,6 +70,7 @@ class UI(QMainWindow):
 		print("KA  exists: ",os.path.exists("../letters/KA.png"))
 		print("space  exists: ",os.path.exists("../letters/space.png"))
 		print("vowle  exists: ",os.path.exists("../letters/vowle.png"))
+		'''
 
 		# Make Lists of the new consonant and vowle pixmaps
 		consonants = [s, n, t, z, k, h, v, g]
@@ -217,6 +219,7 @@ class UI(QMainWindow):
 
 		self.letterDisplay(convertedList)
 
+	# Converts a list of letter tupes into a pixmap
 	def getSubPixmap(self, subList):
 		if not subList:
 			return	
@@ -244,6 +247,7 @@ class UI(QMainWindow):
 
 		# Paint the proper images
 		width = 0
+		# enouncciation
 		if (self.enuncBool == True):
 			for pair in subList:
 				pairWidth = pair[1].width() - padding
@@ -252,6 +256,7 @@ class UI(QMainWindow):
 				painter.drawText(spacer, 40, pair[0])
 				width += pairWidth
 
+		# No enouncciation
 		else:
 			for pair in subList:
 				pairWidth = pair[1].width() - padding
@@ -261,6 +266,7 @@ class UI(QMainWindow):
 		painter.end()  # Ensure this is called to finish painting
 		return disp
 
+	# Adds a list of pixmaps verticaly into a new pixmap
 	def addPixmapV(self, pixList):
 		if not pixList:
 			return	
@@ -290,6 +296,7 @@ class UI(QMainWindow):
 		painter.end()  # Ensure this is called to finish painting
 		return disp
 
+	# Adds a list of pixmaps horisontaly into a new pixmap
 	def addPixmapH(self, pixList):
 		if not pixList:
 			return	
@@ -319,6 +326,9 @@ class UI(QMainWindow):
 		painter.end()  # Ensure this is called to finish painting
 		return disp
 
+	# Go through the recusive list deviding the sentence verticaly and horizontaly
+	# ( , ) for vertical seperation
+	# Base case is connecting horizontaly
 	def getPixmap(self, recList):
 		pixListV = []
 		pixListH = []
@@ -336,7 +346,7 @@ class UI(QMainWindow):
 				newList = []
 			# for adding pixmaps verticaly
 			elif isinstance(element, tuple) and newList and element[0] == ',':
-				# Add all horixontal maps and add resulting map to verical list
+				# combine all horixontal maps and add resulting map to verical list
 				pixListH.append(self.getSubPixmap(newList))
 				pixListV.append(self.addPixmapH(pixListH))
 				newList = []
@@ -354,7 +364,8 @@ class UI(QMainWindow):
 			pixListV.append(disp)
 		if comma == 1:	
 			disp = self.addPixmapV(pixListV)
-		return disp 
+		try: return disp 
+		except: return
 
 	# Constructs a pixpam of the conversion from ConvertedList
 	def letterDisplay(self, convertedList):
