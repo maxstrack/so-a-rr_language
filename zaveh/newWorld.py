@@ -48,6 +48,7 @@ class UI(QMainWindow):
 		KA = QPixmap("../letters/KA.png")
 		space = QPixmap("../letters/space.png")
 		vowle = QPixmap("../letters/vowle.png")
+		'''
 		print("ah  exists: ",os.path.exists("../letters/ah.png"))
 		print("a exists: ",os.path.exists("../letters/a.png"))
 		print("d  exists: ",os.path.exists("../letters/s.png"))
@@ -69,6 +70,7 @@ class UI(QMainWindow):
 		print("KA  exists: ",os.path.exists("../letters/KA.png"))
 		print("space  exists: ",os.path.exists("../letters/space.png"))
 		print("vowle  exists: ",os.path.exists("../letters/vowle.png"))
+		'''
 
 		# Make Lists of the new consonant and vowle pixmaps
 		consonants = [s, n, t, z, k, h, v, g]
@@ -115,7 +117,11 @@ class UI(QMainWindow):
 			('oi', 'oy', 'uoy')								: ('ō', newV[5]),  # /oi/ sound
 		#special chars
 			' '	: (' ', space),												
+			'('	: ('(', space),												
+			')'	: (')', space),												
+			','	: (',', space),												
 		}
+
 
 		# Make a new Dictionary using AliasDict
 		self.convertDict = AliasDict(initialData)
@@ -213,20 +219,13 @@ class UI(QMainWindow):
 
 		self.letterDisplay(convertedList)
 
-	# Constructs a pixpam of the conversion from ConvertedList
-	def letterDisplay(self, convertedList):
-		# Set up an empty pixmap to paint the images
-		scene = QGraphicsScene(self)
-		self.graphicsView.setScene(scene)
-
-		for pair in convertedList:
-			if pair[1].isNull():
-				print(f"Error: One of the pixmaps is null! Pair: {pair}")
-				return
-
+	# Converts a list of letter tupes into a pixmap
+	def getSubPixmap(self, subList):
+		if not subList:
+			return	
 		width = 0
 		height = 0
-		for pair in convertedList:
+		for pair in subList:
 			width += pair[1].width()-padding
 			height = max(height, pair[1].height())
 
@@ -236,9 +235,6 @@ class UI(QMainWindow):
 		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
 		#print(f"Final width: {width}, height: {height}")
-
-		if disp.isNull():
-			return
 
 		painter = QPainter()
 		if not painter.begin(disp):
@@ -251,25 +247,164 @@ class UI(QMainWindow):
 
 		# Paint the proper images
 		width = 0
+		# enouncciation
 		if (self.enuncBool == True):
-			for pair in convertedList:
+			for pair in subList:
 				pairWidth = pair[1].width() - padding
 				spacer = width + pairWidth // 2 
 				painter.drawPixmap(width, 60, pair[1])
 				painter.drawText(spacer, 40, pair[0])
 				width += pairWidth
 
+		# No enouncciation
 		else:
-			for pair in convertedList:
+			for pair in subList:
 				pairWidth = pair[1].width() - padding
 				painter.drawPixmap(width, 0, pair[1])
 				width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
+		return disp
 
-		disp = self.replaceImageColor(disp)
+	# Adds a list of pixmaps verticaly into a new pixmap
+	def addPixmapV(self, pixList):
+		if not pixList:
+			return	
+		width = 0
+		height = 0
+		# get the base size
+		for pixmap in pixList:
+			width = max(width, pixmap.width())
+			height += pixmap.height()
+		height += 30 * (len(pixList) - 1)
 
-		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+		disp = QPixmap(width, height)
+		disp.fill(Qt.transparent)
+
+		painter = QPainter()
+		if not painter.begin(disp):
+			print("Failed to initialize QPainter")
+			return
+
+		# Paint the proper images
+		height = 0
+		for pixmap in pixList:
+			pixHeight = pixmap.height() + 30
+			painter.drawPixmap(0, height, pixmap)
+			height += pixHeight
+
+		painter.end()  # Ensure this is called to finish painting
+		return disp
+
+	# Adds a list of pixmaps horisontaly into a new pixmap
+	def addPixmapH(self, pixList):
+		if not pixList:
+			return	
+		width = 0
+		height = 0
+		# get the base size
+		for pixmap in pixList:
+			width += pixmap.width()
+			height = max(height, pixmap.height())
+
+		disp = QPixmap(width, height)
+		disp.fill(Qt.transparent)
+
+		painter = QPainter()
+		if not painter.begin(disp):
+			print("Failed to initialize QPainter")
+			return
+
+		# Paint the proper images
+		width = 0
+		for pixmap in pixList:
+			pixWidth = pixmap.width()
+			placeHeight = (height - pixmap.height())//2
+			painter.drawPixmap(width, placeHeight, pixmap)
+			width += pixWidth
+
+		painter.end()  # Ensure this is called to finish painting
+		return disp
+
+	# Go through the recusive list deviding the sentence verticaly and horizontaly
+	# ( , ) for vertical seperation
+	# Base case is connecting horizontaly
+	def getPixmap(self, recList):
+		pixListV = []
+		pixListH = []
+		newList = []
+		comma = 0
+		for element in recList:
+			# for adding pixmaps horisontaly
+			if isinstance(element, list):
+				if newList:
+					# condence individual tupels into a pixmap
+					pixListH.append(self.getSubPixmap(newList))
+				if element:
+					# Called recursivly on subLists
+					pixListH.append(self.getPixmap(element))
+				newList = []
+			# for adding pixmaps verticaly
+			elif isinstance(element, tuple) and newList and element[0] == ',':
+				# combine all horixontal maps and add resulting map to verical list
+				pixListH.append(self.getSubPixmap(newList))
+				pixListV.append(self.addPixmapH(pixListH))
+				newList = []
+				pixListH = []
+				comma = 1
+			# base case
+			else:
+				newList.append(element)
+
+		# Catch all remainig elements after last list or comma
+		if newList:
+			pixListH.append(self.getSubPixmap(newList))
+		if pixListH:
+			disp = self.addPixmapH(pixListH)
+			pixListV.append(disp)
+		if comma == 1:	
+			disp = self.addPixmapV(pixListV)
+		try: return disp 
+		except: return
+
+	# Constructs a pixpam of the conversion from ConvertedList
+	def letterDisplay(self, convertedList):
+		# Set up an empty pixmap to paint the images
+		scene = QGraphicsScene(self)
+		self.graphicsView.setScene(scene)
+		if not convertedList:
+			return
+
+		for pair in convertedList:
+			if pair[1].isNull():
+				print(f"Error: One of the pixmaps is null! Pair: {pair}")
+				return
+
+		splitList = self.parseParentheses(convertedList)
+
+		#disp = self.addPixmap(convertedList)
+		disp = self.getPixmap(splitList)
+		if disp:
+			disp = self.replaceImageColor(disp)
+			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+	
+	def parseParentheses(self, tuplesList):
+		def helper(index):
+			nested = []
+			while index < len(tuplesList):
+				char, value = tuplesList[index]
+				if char == '(':
+					sublist, index = helper(index + 1)
+					nested.append(sublist)
+				elif char == ')':
+					return nested, index
+				else:
+					nested.append((char, value))
+				index += 1
+			return nested, index
+
+		parsed, _ = helper(0)
+		return parsed
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
