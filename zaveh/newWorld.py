@@ -3,10 +3,11 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene, QColorDialog
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage
-from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtCore import Qt, QRectF, QPointF, QSizeF
 import numpy as np
 import qdarkgraystyle
 
+from PyQt5.QtGui import QImage, QTransform
 
 from aliasDict import AliasDict
 
@@ -131,6 +132,9 @@ class UI(QMainWindow):
 
 		# Color for letter font
 		self.color = QColor("white")
+
+		# Degree for angle split
+		self.totalAngle = 30
 
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
@@ -270,6 +274,20 @@ class UI(QMainWindow):
 	def addPixmapV(self, pixList):
 		if not pixList:
 			return	
+
+		n = len(pixList)
+		#theta = self.totalAngle / n
+		theta = 90 / n
+
+		if n % 2 == 1:
+			multipliers = list(range(-n//2 + 1, n//2 + 1))
+		else:
+			multipliers = list(range(-n//2, 0)) + list(range(1, n//2 + 1))
+
+		pixmaps = zip(pixList, [num * theta for num in multipliers])
+
+		'''
+		#pixList = self.spreadPixmaps(pixList)
 		width = 0
 		height = 0
 		# get the base size
@@ -277,24 +295,29 @@ class UI(QMainWindow):
 			width = max(width, pixmap.width())
 			height += pixmap.height()
 		height += 30 * (len(pixList) - 1)
+		'''
+		w = 0
+		# get the base size
+		for pixmap in pixList:
+			w = max(w, pixmap.width())
 
-		disp = QPixmap(width, height)
-		disp.fill(Qt.transparent)
+		result = QPixmap(w, 2 * w)
+		result.fill(Qt.transparent)
 
-		painter = QPainter()
-		if not painter.begin(disp):
-			print("Failed to initialize QPainter")
-			return
+		painter = QPainter(result)
 
 		# Paint the proper images
 		height = 0
-		for pixmap in pixList:
-			pixHeight = pixmap.height() + 30
-			painter.drawPixmap(0, height, pixmap)
+		for pixmap, angle in pixmaps:
+			pixHeight = pixmap.height()
+
+			p2 = pixmap.transformed(QTransform().rotate(angle))
+			painter.drawPixmap(0, 0, p2)
+
 			height += pixHeight
 
 		painter.end()  # Ensure this is called to finish painting
-		return disp
+		return result
 
 	# Adds a list of pixmaps horisontaly into a new pixmap
 	def addPixmapH(self, pixList):
@@ -364,6 +387,7 @@ class UI(QMainWindow):
 			pixListV.append(disp)
 		if comma == 1:	
 			disp = self.addPixmapV(pixListV)
+			#disp = self.rotate_and_composite_pixmaps(pixListV)
 		try: return disp 
 		except: return
 
