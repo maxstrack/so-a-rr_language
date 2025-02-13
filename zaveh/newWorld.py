@@ -135,7 +135,7 @@ class UI(QMainWindow):
 		self.color = QColor("white")
 
 		# Degree for angle split
-		self.totalAngle = 180
+		self.totalAngle = 90
 
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
@@ -273,30 +273,9 @@ class UI(QMainWindow):
 
 	# Adds a list of pixmaps verticaly into a new pixmap
 	def addPixmapV(self, pixList):
-		if len(pixList) < 2:
-			return	
+		if len(pixList) == 1:
+			return	pixList[0]
 
-		'''
-		n = len(pixList)
-		pixmaps = []
-		if n % 2 == 1:
-			multipliers = list(range(-n//2 + 1, n//2 + 1))
-			theta = self.totalAngle / (n-1)
-			pixmaps = list(zip(pixList, [num * theta for num in multipliers]))
-		else:
-			multipliers = list(range(-n//2, 0)) + list(range(1, n//2 + 1))
-
-			angles = []
-			theta = self.totalAngle / n
-			for i, num in enumerate(multipliers):
-				angle = num * theta
-				if i > 0 and ((multipliers[i]  < 0 and multipliers[i+1] > 0) or (multipliers[i] > 0 and multipliers[i-1] < 0)):
-					angle = angle - angle/3
-				else:
-					angle = angle + angle/3
-				angles.append(angle)
-			pixmaps = list(zip(pixList, angles))
-			'''
 		n = len(pixList)
 
 		theta = self.totalAngle / (n - 1)
@@ -315,8 +294,10 @@ class UI(QMainWindow):
 		totAngle = self.totalAngle/2
 		anchorGap = 100
 
-		# get the base size
-		h1, h2, h3, w, bOff = 0,0,0,0,0
+		minY = float('inf')
+		maxY = float('-inf')
+		maxX = 0
+
 		for i, (pixmap, angle) in enumerate(pixmaps):
 			if not pixmap:
 				return
@@ -324,20 +305,24 @@ class UI(QMainWindow):
 			rotated = pixmap.transformed(QTransform().rotate(angle))
 			baseOffset = i * anchorGap
 
+			# For positive angles, the pixmap’s "tip" is at the top.
+			# For negative angles, the tip is at the bottom.
 			if angle > 0:
-				h3 = max(h3, baseOffset + rotated.height())
+				drawY = baseOffset
 			elif angle < 0:
-				pixH = baseOffset + rotated.height()
-				h1 =  max(h1, pixH)
-				if (h1 == pixH):
-					bOff = baseOffset
-
+				drawY = baseOffset - rotated.height()
+			else:
+				drawY = baseOffset - rotated.height() // 2
 
 			drawX = int(totAngle - abs(angle)) * 4
-			w = max(w, drawX + rotated.width())
 
-		h = h1 + h3
-		baseline = h1 - bOff 
+			minY = min(minY, drawY)
+			maxY = max(maxY, drawY + rotated.height())
+			maxX = max(maxX, drawX + rotated.width())
+
+		h = maxY - minY
+		w = maxX
+		baseline = -minY
 
 		result = QPixmap(w, h)
 		result.fill(Qt.transparent)
