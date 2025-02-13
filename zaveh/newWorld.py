@@ -276,16 +276,41 @@ class UI(QMainWindow):
 		if len(pixList) < 2:
 			return	
 
+		'''
 		n = len(pixList)
-		theta = self.totalAngle / n
-
+		pixmaps = []
 		if n % 2 == 1:
 			multipliers = list(range(-n//2 + 1, n//2 + 1))
+			theta = self.totalAngle / (n-1)
+			pixmaps = list(zip(pixList, [num * theta for num in multipliers]))
 		else:
 			multipliers = list(range(-n//2, 0)) + list(range(1, n//2 + 1))
 
-		pixmaps = zip(pixList, [num * theta for num in multipliers])
-		pixmaps1 = zip(pixList, [num * theta for num in multipliers])
+			angles = []
+			theta = self.totalAngle / n
+			for i, num in enumerate(multipliers):
+				angle = num * theta
+				if i > 0 and ((multipliers[i]  < 0 and multipliers[i+1] > 0) or (multipliers[i] > 0 and multipliers[i-1] < 0)):
+					angle = angle - angle/3
+				else:
+					angle = angle + angle/3
+				angles.append(angle)
+			pixmaps = list(zip(pixList, angles))
+			'''
+		n = len(pixList)
+
+		theta = self.totalAngle / (n - 1)
+
+		if n % 2 == 1:
+			# For odd numbers, use integer multipliers.
+			multipliers = list(range(-(n - 1) // 2, (n - 1) // 2 + 1))
+		else:
+			# For even numbers, use half-step multipliers.
+			start = -(n - 1) / 2.0
+			multipliers = [start + i for i in range(n)]
+
+		angles = [mult * theta for mult in multipliers]
+		pixmaps = list(zip(pixList, angles))
 
 		totAngle = self.totalAngle/2
 		anchorGap = 100
@@ -319,7 +344,7 @@ class UI(QMainWindow):
 
 		painter = QPainter(result)
 		# Paint the proper images
-		for i, (pixmap, angle) in enumerate(pixmaps1):
+		for i, (pixmap, angle) in enumerate(pixmaps):
 			rotated = pixmap.transformed(QTransform().rotate(angle))
 			anchor = baseline + i * anchorGap
 
