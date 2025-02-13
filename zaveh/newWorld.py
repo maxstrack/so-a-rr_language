@@ -1,4 +1,5 @@
 import sys
+import math
 import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene, QColorDialog
@@ -134,7 +135,7 @@ class UI(QMainWindow):
 		self.color = QColor("white")
 
 		# Degree for angle split
-		self.totalAngle = 30
+		self.totalAngle = 180
 
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
@@ -272,12 +273,11 @@ class UI(QMainWindow):
 
 	# Adds a list of pixmaps verticaly into a new pixmap
 	def addPixmapV(self, pixList):
-		if not pixList:
+		if len(pixList) < 2:
 			return	
 
 		n = len(pixList)
-		#theta = self.totalAngle / n
-		theta = 90 / n
+		theta = self.totalAngle / n
 
 		if n % 2 == 1:
 			multipliers = list(range(-n//2 + 1, n//2 + 1))
@@ -285,38 +285,59 @@ class UI(QMainWindow):
 			multipliers = list(range(-n//2, 0)) + list(range(1, n//2 + 1))
 
 		pixmaps = zip(pixList, [num * theta for num in multipliers])
+		pixmaps1 = zip(pixList, [num * theta for num in multipliers])
 
-		'''
-		#pixList = self.spreadPixmaps(pixList)
-		width = 0
-		height = 0
-		# get the base size
-		for pixmap in pixList:
-			width = max(width, pixmap.width())
-			height += pixmap.height()
-		height += 30 * (len(pixList) - 1)
-		'''
-		w = 0
-		# get the base size
-		for pixmap in pixList:
-			w = max(w, pixmap.width())
+		totAngle = self.totalAngle/2
+		anchorGap = 100
 
-		result = QPixmap(w, 2 * w)
+		# get the base size
+		h1, h2, h3, w, bOff = 0,0,0,0,0
+		for i, (pixmap, angle) in enumerate(pixmaps):
+			if not pixmap:
+				return
+
+			rotated = pixmap.transformed(QTransform().rotate(angle))
+			baseOffset = i * anchorGap
+
+			if angle > 0:
+				h3 = max(h3, baseOffset + rotated.height())
+			elif angle < 0:
+				pixH = baseOffset + rotated.height()
+				h1 =  max(h1, pixH)
+				if (h1 == pixH):
+					bOff = baseOffset
+
+
+			drawX = int(totAngle - abs(angle)) * 4
+			w = max(w, drawX + rotated.width())
+
+		h = h1 + h3
+		baseline = h1 - bOff 
+
+		result = QPixmap(w, h)
 		result.fill(Qt.transparent)
 
 		painter = QPainter(result)
-
 		# Paint the proper images
-		height = 0
-		for pixmap, angle in pixmaps:
-			pixHeight = pixmap.height()
+		for i, (pixmap, angle) in enumerate(pixmaps1):
+			rotated = pixmap.transformed(QTransform().rotate(angle))
+			anchor = baseline + i * anchorGap
 
-			p2 = pixmap.transformed(QTransform().rotate(angle))
-			painter.drawPixmap(0, 0, p2)
+			if angle > 0:
+				# the top of the rotated pixmap aligns with the anchor
+				drawY = anchor  
+			elif angle < 0:
+				# the bottom aligns with the anchor
+				drawY = anchor - rotated.height()  
+			else:
+				# center the pixmap vertically on the anchor.
+				drawY = anchor - rotated.height() // 2
 
-			height += pixHeight
+			drawX = int(totAngle - abs(angle)) * 4
+			painter.drawPixmap(drawX, drawY, rotated)
 
-		painter.end()  # Ensure this is called to finish painting
+		painter.end()  # Finish painting
+
 		return result
 
 	# Adds a list of pixmaps horisontaly into a new pixmap
