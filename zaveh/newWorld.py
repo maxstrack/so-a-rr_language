@@ -269,7 +269,7 @@ class UI(QMainWindow):
 				width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
-		return disp
+		return (disp, disp.height()//2)
 
 	# Adds a list of pixmaps verticaly into a new pixmap
 	def addPixmapV(self, pixList):
@@ -298,7 +298,7 @@ class UI(QMainWindow):
 		maxY = float('-inf')
 		maxX = 0
 
-		for i, (pixmap, angle) in enumerate(pixmaps):
+		for i, ((pixmap, _), angle) in enumerate(pixmaps):
 			if not pixmap:
 				return
 
@@ -329,7 +329,7 @@ class UI(QMainWindow):
 
 		painter = QPainter(result)
 		# Paint the proper images
-		for i, (pixmap, angle) in enumerate(pixmaps):
+		for i, ((pixmap, _), angle) in enumerate(pixmaps):
 			rotated = pixmap.transformed(QTransform().rotate(angle))
 			anchor = baseline + i * anchorGap
 
@@ -348,7 +348,7 @@ class UI(QMainWindow):
 
 		painter.end()  # Finish painting
 
-		return result
+		return (result, 0)
 
 	# Adds a list of pixmaps horisontaly into a new pixmap
 	def addPixmapH(self, pixList):
@@ -357,7 +357,7 @@ class UI(QMainWindow):
 		width = 0
 		height = 0
 		# get the base size
-		for pixmap in pixList:
+		for (pixmap, _) in pixList:
 			width += pixmap.width()
 			height = max(height, pixmap.height())
 
@@ -371,14 +371,14 @@ class UI(QMainWindow):
 
 		# Paint the proper images
 		width = 0
-		for pixmap in pixList:
+		for (pixmap, _) in pixList:
 			pixWidth = pixmap.width()
 			placeHeight = (height - pixmap.height())//2
 			painter.drawPixmap(width, placeHeight, pixmap)
 			width += pixWidth
 
 		painter.end()  # Ensure this is called to finish painting
-		return disp
+		return (disp, 0)
 
 	# Go through the recusive list deviding the sentence verticaly and horizontaly
 	# ( , ) for vertical seperation
@@ -438,7 +438,7 @@ class UI(QMainWindow):
 		splitList = self.parseParentheses(convertedList)
 
 		#disp = self.addPixmap(convertedList)
-		disp = self.getPixmap(splitList)
+		(disp, _) = self.getPixmap(splitList)
 		if disp:
 			disp = self.replaceImageColor(disp)
 			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
