@@ -23,6 +23,7 @@ class UI(QMainWindow):
 		
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
+		self.splitLineEdit.textChanged.connect(self.changeAngle)
 		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d h th a ai e ea i igh o oa u ew oo oi b "))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
 		self.menuEnunciation.triggered.connect(self.changeEnunc)
@@ -160,8 +161,17 @@ class UI(QMainWindow):
 	# changes the enuncBool and re-calls convert
 	# Effectivly changing the setting
 	def changeEnunc(self):
-			self.enuncBool = not self.enuncBool
+		self.enuncBool = not self.enuncBool
+		self.convert()
+
+	# changes the totalAngle and re-calls convert
+	# Effectivly changing the setting
+	def changeAngle(self):
+		try:
+			self.totalAngle = int(self.splitLineEdit.text())
 			self.convert()
+		except:
+			return
 
 	# Replace the non-transparent pixels with a color
 	def replaceImageColor(self, pixmap):
