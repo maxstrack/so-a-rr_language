@@ -1,12 +1,14 @@
 import sys
+import math
 import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene, QColorDialog
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage
-from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtCore import Qt, QRectF, QPointF, QSizeF
 import numpy as np
 import qdarkgraystyle
 
+from PyQt5.QtGui import QImage, QTransform
 
 from aliasDict import AliasDict
 
@@ -21,6 +23,7 @@ class UI(QMainWindow):
 		
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
+		self.splitLineEdit.textChanged.connect(self.changeAngle)
 		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d h th a ai e ea i igh o oa u ew oo oi b "))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
 		self.menuEnunciation.triggered.connect(self.changeEnunc)
@@ -132,6 +135,9 @@ class UI(QMainWindow):
 		# Color for letter font
 		self.color = QColor("white")
 
+		# Degree for angle split
+		self.totalAngle = 90
+
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
 		newMaps = []
@@ -155,8 +161,17 @@ class UI(QMainWindow):
 	# changes the enuncBool and re-calls convert
 	# Effectivly changing the setting
 	def changeEnunc(self):
-			self.enuncBool = not self.enuncBool
+		self.enuncBool = not self.enuncBool
+		self.convert()
+
+	# changes the totalAngle and re-calls convert
+	# Effectivly changing the setting
+	def changeAngle(self):
+		try:
+			self.totalAngle = int(self.splitLineEdit.text())
 			self.convert()
+		except:
+			return
 
 	# Replace the non-transparent pixels with a color
 	def replaceImageColor(self, pixmap):
@@ -264,37 +279,87 @@ class UI(QMainWindow):
 				width += pairWidth
 
 		painter.end()  # Ensure this is called to finish painting
-		return disp
+		return (disp, disp.height()//2)
 
 	# Adds a list of pixmaps verticaly into a new pixmap
 	def addPixmapV(self, pixList):
-		if not pixList:
-			return	
-		width = 0
-		height = 0
-		# get the base size
-		for pixmap in pixList:
-			width = max(width, pixmap.width())
-			height += pixmap.height()
-		height += 30 * (len(pixList) - 1)
+		if len(pixList) == 1:
+			return	pixList[0]
 
-		disp = QPixmap(width, height)
-		disp.fill(Qt.transparent)
+		n = len(pixList)
 
-		painter = QPainter()
-		if not painter.begin(disp):
-			print("Failed to initialize QPainter")
-			return
+		theta = self.totalAngle / (n - 1)
 
+		if n % 2 == 1:
+			# For odd numbers, use integer multipliers.
+			multipliers = list(range(-(n - 1) // 2, (n - 1) // 2 + 1))
+		else:
+			# For even numbers, use half-step multipliers.
+			start = -(n - 1) / 2.0
+			multipliers = [start + i for i in range(n)]
+
+		angles = [mult * theta for mult in multipliers]
+		pixmaps = list(zip(pixList, angles))
+
+		totAngle = self.totalAngle/2
+		anchorGap = 100
+
+		minY = float('inf')
+		maxY = float('-inf')
+		maxX = 0
+
+		for i, ((pixmap, _), angle) in enumerate(pixmaps):
+			if not pixmap:
+				return
+
+			rotated = pixmap.transformed(QTransform().rotate(angle))
+			baseOffset = i * anchorGap
+
+			# For positive angles, the pixmap’s "tip" is at the top.
+			# For negative angles, the tip is at the bottom.
+			if angle > 0:
+				drawY = baseOffset
+			elif angle < 0:
+				drawY = baseOffset - rotated.height()
+			else:
+				drawY = baseOffset - rotated.height() // 2
+
+			drawX = int(totAngle - abs(angle)) * 4
+
+			minY = min(minY, drawY)
+			maxY = max(maxY, drawY + rotated.height())
+			maxX = max(maxX, drawX + rotated.width())
+
+		h = maxY - minY
+		w = maxX
+		baseline = -minY
+
+		result = QPixmap(w, h)
+		result.fill(Qt.transparent)
+
+		painter = QPainter(result)
 		# Paint the proper images
-		height = 0
-		for pixmap in pixList:
-			pixHeight = pixmap.height() + 30
-			painter.drawPixmap(0, height, pixmap)
-			height += pixHeight
+		for i, ((pixmap, _), angle) in enumerate(pixmaps):
+			rotated = pixmap.transformed(QTransform().rotate(angle))
+			anchor = baseline + i * anchorGap
 
-		painter.end()  # Ensure this is called to finish painting
-		return disp
+			if angle > 0:
+				# the top of the rotated pixmap aligns with the anchor
+				drawY = anchor  
+			elif angle < 0:
+				# the bottom aligns with the anchor
+				drawY = anchor - rotated.height()  
+			else:
+				# center the pixmap vertically on the anchor.
+				drawY = anchor - rotated.height() // 2
+
+			drawX = int(totAngle - abs(angle)) * 4
+			painter.drawPixmap(drawX, drawY, rotated)
+
+		painter.end()  # Finish painting
+		midPoint = int(baseline + (len(pixList)-1)/2 * anchorGap)
+
+		return (result, midPoint)
 
 	# Adds a list of pixmaps horisontaly into a new pixmap
 	def addPixmapH(self, pixList):
@@ -302,10 +367,12 @@ class UI(QMainWindow):
 			return	
 		width = 0
 		height = 0
+		midHeight = 0
 		# get the base size
-		for pixmap in pixList:
+		for (pixmap, midPoint) in pixList:
 			width += pixmap.width()
 			height = max(height, pixmap.height())
+			midHeight = max(midHeight, midPoint)
 
 		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
@@ -317,14 +384,14 @@ class UI(QMainWindow):
 
 		# Paint the proper images
 		width = 0
-		for pixmap in pixList:
+		for (pixmap, midPoint) in pixList:
 			pixWidth = pixmap.width()
-			placeHeight = (height - pixmap.height())//2
+			placeHeight = (midHeight - midPoint)
 			painter.drawPixmap(width, placeHeight, pixmap)
 			width += pixWidth
 
 		painter.end()  # Ensure this is called to finish painting
-		return disp
+		return (disp, midHeight)
 
 	# Go through the recusive list deviding the sentence verticaly and horizontaly
 	# ( , ) for vertical seperation
@@ -360,11 +427,12 @@ class UI(QMainWindow):
 		if newList:
 			pixListH.append(self.getSubPixmap(newList))
 		if pixListH:
-			disp = self.addPixmapH(pixListH)
-			pixListV.append(disp)
+			dispTuple = self.addPixmapH(pixListH)
+			pixListV.append(dispTuple)
 		if comma == 1:	
-			disp = self.addPixmapV(pixListV)
-		try: return disp 
+			dispTuple = self.addPixmapV(pixListV)
+			#disp = self.rotate_and_composite_pixmaps(pixListV)
+		try: return dispTuple 
 		except: return
 
 	# Constructs a pixpam of the conversion from ConvertedList
@@ -380,13 +448,16 @@ class UI(QMainWindow):
 				print(f"Error: One of the pixmaps is null! Pair: {pair}")
 				return
 
-		splitList = self.parseParentheses(convertedList)
 
-		#disp = self.addPixmap(convertedList)
-		disp = self.getPixmap(splitList)
-		if disp:
-			disp = self.replaceImageColor(disp)
-			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+		#disp = self.gutSubPixmap(convertedList)
+		try: 
+			splitList = self.parseParentheses(convertedList)
+			(disp, _) = self.getPixmap(splitList)
+		except:
+			(disp, _) = self.getSubPixmap(convertedList)
+
+		disp = self.replaceImageColor(disp)
+		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
