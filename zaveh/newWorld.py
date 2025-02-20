@@ -438,13 +438,16 @@ class UI(QMainWindow):
 				print(f"Error: One of the pixmaps is null! Pair: {pair}")
 				return
 
-		splitList = self.parseParentheses(convertedList)
 
-		#disp = self.addPixmap(convertedList)
-		(disp, _) = self.getPixmap(splitList)
-		if disp:
-			disp = self.replaceImageColor(disp)
-			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+		#disp = self.gutSubPixmap(convertedList)
+		try: 
+			splitList = self.parseParentheses(convertedList)
+			(disp, _) = self.getPixmap(splitList)
+		except:
+			(disp, _) = self.getSubPixmap(convertedList)
+
+		disp = self.replaceImageColor(disp)
+		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
