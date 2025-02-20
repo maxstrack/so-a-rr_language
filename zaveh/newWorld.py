@@ -347,8 +347,9 @@ class UI(QMainWindow):
 			painter.drawPixmap(drawX, drawY, rotated)
 
 		painter.end()  # Finish painting
+		midPoint = int(baseline + (len(pixList)-1)/2 * anchorGap)
 
-		return (result, 0)
+		return (result, midPoint)
 
 	# Adds a list of pixmaps horisontaly into a new pixmap
 	def addPixmapH(self, pixList):
@@ -356,10 +357,12 @@ class UI(QMainWindow):
 			return	
 		width = 0
 		height = 0
+		midHeight = 0
 		# get the base size
-		for (pixmap, _) in pixList:
+		for (pixmap, midPoint) in pixList:
 			width += pixmap.width()
 			height = max(height, pixmap.height())
+			midHeight = max(midHeight, midPoint)
 
 		disp = QPixmap(width, height)
 		disp.fill(Qt.transparent)
@@ -371,14 +374,14 @@ class UI(QMainWindow):
 
 		# Paint the proper images
 		width = 0
-		for (pixmap, _) in pixList:
+		for (pixmap, midPoint) in pixList:
 			pixWidth = pixmap.width()
-			placeHeight = (height - pixmap.height())//2
+			placeHeight = (midHeight - midPoint)
 			painter.drawPixmap(width, placeHeight, pixmap)
 			width += pixWidth
 
 		painter.end()  # Ensure this is called to finish painting
-		return (disp, 0)
+		return (disp, midHeight)
 
 	# Go through the recusive list deviding the sentence verticaly and horizontaly
 	# ( , ) for vertical seperation
@@ -414,12 +417,12 @@ class UI(QMainWindow):
 		if newList:
 			pixListH.append(self.getSubPixmap(newList))
 		if pixListH:
-			disp = self.addPixmapH(pixListH)
-			pixListV.append(disp)
+			dispTuple = self.addPixmapH(pixListH)
+			pixListV.append(dispTuple)
 		if comma == 1:	
-			disp = self.addPixmapV(pixListV)
+			dispTuple = self.addPixmapV(pixListV)
 			#disp = self.rotate_and_composite_pixmaps(pixListV)
-		try: return disp 
+		try: return dispTuple 
 		except: return
 
 	# Constructs a pixpam of the conversion from ConvertedList
