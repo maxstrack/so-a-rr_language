@@ -52,6 +52,9 @@ class UI(QMainWindow):
 		KA = QPixmap("../letters/KA.png")
 		space = QPixmap("../letters/space.png")
 		vowle = QPixmap("../letters/vowle.png")
+
+		numStart = QPixmap("../letters/numStart.png")
+		numEnd = QPixmap("../letters/numEnd.png")
 		'''
 		print("ah  exists: ",os.path.exists("../letters/ah.png"))
 		print("a exists: ",os.path.exists("../letters/a.png"))
@@ -146,6 +149,8 @@ class UI(QMainWindow):
 			'e' : ('e', rr),
 			'f' : ('f', i),
 			'g' : ('g', n),
+			'(' : ('', numStart),
+			')' : ('', numEnd),
 		}
 		# Make a new Dictionaries using AliasDict
 		self.convertDict = AliasDict(initialData)
@@ -197,7 +202,7 @@ class UI(QMainWindow):
 			# If the first element of the tuple is '~' and we have a number to insert:
 			if tup[0] == '~' and num_idx < len(numList):
 				num = numList[num_idx]
-				pixList = self.numDict.convertString(num)
+				pixList = self.numDict.convertString('('+num+')')
 				(newPix,_) = self.getSubPixmap(pixList, False)
 				new_tuple = (num, newPix)
 				num_idx += 1
