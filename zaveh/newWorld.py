@@ -128,8 +128,28 @@ class UI(QMainWindow):
 		}
 
 
-		# Make a new Dictionary using AliasDict
+		numData = {
+			'0' : ('0', h),
+			'1' : ('1', d),
+			'2' : ('2', s),
+			'3' : ('3', g),
+			'4' : ('4', k),
+			'5' : ('5', oo),
+			'6' : ('6', l),
+			'7' : ('7', t),
+			'8' : ('8', u),
+			'9' : ('9', a),
+			'a' : ('a', v),
+			'b' : ('b', z),
+			'c' : ('c', ah),
+			'd' : ('d', e),
+			'e' : ('e', rr),
+			'f' : ('f', i),
+			'g' : ('g', n),
+		}
+		# Make a new Dictionaries using AliasDict
 		self.convertDict = AliasDict(initialData)
+		self.numDict = AliasDict(numData)
 
 		# bool for Enunciation
 		self.enuncBool = True
@@ -176,7 +196,10 @@ class UI(QMainWindow):
 		for tup in convertList:
 			# If the first element of the tuple is '~' and we have a number to insert:
 			if tup[0] == '~' and num_idx < len(numList):
-				new_tuple = (numList[num_idx],) + tup[1:]
+				num = numList[num_idx]
+				pixList = self.numDict.convertString(num)
+				(newPix,_) = self.getSubPixmap(pixList, False)
+				new_tuple = (num, newPix)
 				num_idx += 1
 			else:
 				new_tuple = tup
@@ -270,16 +293,20 @@ class UI(QMainWindow):
 		print("Image Saved")
 
 	# Converts a list of letter tupes into a pixmap
-	def getSubPixmap(self, subList):
+	def getSubPixmap(self, subList, enunc=None):
+		if enunc is None:
+			enunc = self.enuncBool
+
 		if not subList:
 			return	
+
 		width = 0
 		height = 0
 		for pair in subList:
 			width += pair[1].width()-padding
 			height = max(height, pair[1].height())
 
-		if (self.enuncBool == True):
+		if (enunc == True):
 			height = height + 60
 
 		disp = QPixmap(width, height)
@@ -298,7 +325,7 @@ class UI(QMainWindow):
 		# Paint the proper images
 		width = 0
 		# enouncciation
-		if (self.enuncBool == True):
+		if (enunc == True):
 			for pair in subList:
 				pairWidth = pair[1].width() - padding
 				spacer = width + pairWidth // 2 
