@@ -1,4 +1,5 @@
 import sys
+import re
 import math
 import os
 from PyQt5 import QtWidgets, uic
@@ -83,7 +84,7 @@ class UI(QMainWindow):
 	
 		initialData = {
 		# consonants
-			('k', 'c', 'qu', 'ck', 'lk', 'q')				: ('s', s),  # /k/ sound
+			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('s', s),  # /k/ sound
 			('t', 'tt')										: ('n', n),  # /t/ sound
 			('l', 'll')										: ('t', t),  # /l/ sound
 			('w', 'wh')										: ('z', z),  # /w/,/h/ sound
@@ -123,6 +124,7 @@ class UI(QMainWindow):
 			'('	: ('(', space),												
 			')'	: (')', space),												
 			','	: (',', space),												
+			'~' : ('~', space),
 		}
 
 
@@ -137,6 +139,51 @@ class UI(QMainWindow):
 
 		# Degree for angle split
 		self.totalAngle = 90
+
+	# takes the english string, replaces all numbers with ~ 
+	# Then returns new string and list of base 17 numbers
+	def parseReplace(self, engString):
+		numList = []
+
+		def int_to_base(n, base=17):
+			# Base 17 digits: 0-9 then a, b, c, d, e, f, g 
+			digits = "0123456789abcdefg"
+			if n == 0:
+				return "0"
+			result = ""
+			while n:
+				n, remainder = divmod(n, base)
+				result = digits[remainder] + result
+			return result
+
+		# This helper will be called for every match.
+		def repl(match):
+			numberStr = match.group(0)
+			number = int(numberStr)
+			converted = int_to_base(number)
+			numList.append(converted)
+			return "~"	# Replace the number with "~"
+
+		newstring = re.sub(r'\d+', repl, engString)
+		return newstring, numList
+
+	# takes a vector of tuples, and replaces the the '~' (first element of the tuple) 
+	# with the corresponding number in numList
+	def numInsert(self, convertList, numList):
+		newConvertList = []
+		num_idx = 0 
+		
+		for tup in convertList:
+			# If the first element of the tuple is '~' and we have a number to insert:
+			if tup[0] == '~' and num_idx < len(numList):
+				new_tuple = (numList[num_idx],) + tup[1:]
+				num_idx += 1
+			else:
+				new_tuple = tup
+			newConvertList.append(new_tuple)
+		
+		return newConvertList
+
 
 	# Makes the new Maps by adding a letter and Diacrit
 	def paintNewMaps(self, letterList, letterType ):
@@ -221,18 +268,6 @@ class UI(QMainWindow):
 		pixmap.save(f)
 
 		print("Image Saved")
-
-	# Converts the english to zentil and calls letterDisplay
-	def convert(self):
-		engWord = self.engOut.toPlainText().lower()
-		zenWord = ""
-		convertedList = self.convertDict.convertString(engWord)
-		for pair in convertedList:
-			zenWord += pair[0]
-
-		self.zenOut.setText(zenWord)
-
-		self.letterDisplay(convertedList)
 
 	# Converts a list of letter tupes into a pixmap
 	def getSubPixmap(self, subList):
@@ -345,7 +380,7 @@ class UI(QMainWindow):
 
 			if angle > 0:
 				# the top of the rotated pixmap aligns with the anchor
-				drawY = anchor  
+				drawY = anchor	
 			elif angle < 0:
 				# the bottom aligns with the anchor
 				drawY = anchor - rotated.height()  
@@ -476,6 +511,20 @@ class UI(QMainWindow):
 
 		parsed, _ = helper(0)
 		return parsed
+
+	# Converts the english to zentil and calls letterDisplay
+	def convert(self):
+		engWord = self.engOut.toPlainText().lower()
+		zenWord = ""
+		noNumWord, numberList = self.parseReplace(engWord)
+		convertedList = self.convertDict.convertString(noNumWord)
+		convertedList = self.numInsert(convertedList, numberList)
+		for pair in convertedList:
+			zenWord += pair[0]
+
+		self.zenOut.setText(zenWord)
+
+		self.letterDisplay(convertedList)
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
