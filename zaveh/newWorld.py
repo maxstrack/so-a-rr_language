@@ -80,48 +80,48 @@ class UI(QMainWindow):
 		'''
 
 		# Make Lists of the new consonant and vowle pixmaps
-		consonants = [s, n, t, z, k, h, v, g]
+		consonants = [h, v, g, s, z, k, t, n] 
 		newC = self.paintNewMaps(consonants, consonant) 
-		vowles = [e, a, u, i, oo, ah]
+		vowles = [i, oo, u, a, ah, e]
 		newV = self.paintNewMaps(vowles, vowle) 
-	
+
 		initialData = {
-		# consonants
-			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('s', s),  # /k/ sound
-			('t', 'tt')										: ('n', n),  # /t/ sound
-			('l', 'll')										: ('t', t),  # /l/ sound
-			('w', 'wh')										: ('z', z),  # /w/,/h/ sound
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('k', k),  # /ng/,/g/ sound
-			('v', 'ph',)									: ('h', h),  # /v/ sound
-			('s', 'sc', 'ps', 'st')							: ('v', v),  # /s/ sound
-			('h')											: ('g', g),  # /p/ sound
-			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr', rr),	# /n/ sound
+			('v', 'ph')										: ('rr', rr),	# /n/ sound
+			('m', 'mm', 'mb', 'mn', 'lm')					: ('d', d),  # /ch/ sound
 			('r', 'rr', 'wr', 'rh')							: ('l', l),  # /r/ sound
-			('ch', 'tch')									: ('d', d),  # /ch/ sound
-		# digraphs
-			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),	# /f/ sound
-			('j', 'ge', 'dge', 'gg')						: ('ng', newC[1]),	# /j/ sound
-			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),	# /m/ sound
-			('sh', 'sci')									: ('zh', newC[3]),	# /sh/ sound
-			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),	# /z/ sound
-			('p', 'pp')										: ('w', newC[5]),	# /p/ sound
-			('d', 'dd', 'ed')								: ('f', newC[6]),  # /d/ sound
-			('th')											: ('j', newC[7]),  # /th/ sound
-			('b', 'bb')										: ('KH', KA),	# /b/
-		# vowels
-			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
-			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a', a),  # /e/ sound
-			('i', 'ie', 'ui')								: ('uh', u),  # /i/ sound
-			('o', 'ho', 'y')								: ('i', i),  # /o/,/y/ sound
-			('u')											: ('ou', oo),	# /u/ sound
-			('oo', 'ou')									: ('ah', ah),	# /oo/ sound (short oo)
-		#long_vowels
-			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),	# /ā/ sound
-			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[1]),	# /ē/ sound
-			('igh', 'i-e')									: ('ew', newV[2]),	# /ī/ sound
-			('oa', 'o-e', 'ow')								: ('ī', newV[3]),	# /ō/ sound
-			('ew')											: ('oy', newV[4]),	# /ü/ sound
-			('oi', 'oy', 'uoy')								: ('ō', newV[5]),  # /oi/ sound
+
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')	 		: ('h', h),  # /v/ sound
+			('h')											: ('v', v),  # /p/ sound
+			('t', 'tt')										: ('g', g),  # /g/ sound
+			('f', 'ff', 'gh', 'lf', 'ft')					: ('s', s),  # /k/ sound
+			('p', 'pp')										: ('z', z),  # /w/,/h/ sound
+			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('k', k),  # /ng/,/g/ sound
+			('l', 'll')										: ('t', t),  # /l/ sound
+			('d', 'dd', 'ed')								: ('n', n),  # /d/ sound
+
+			('j', 'ge', 'dge', 'gg')						: ('w', newC[0]),	# /f/ sound
+			('w', 'wh')										: ('f', newC[1]),	# /j/ sound
+			('th')											: ('j', newC[2]),	# /m/ sound
+			('s', 'sc', 'ps', 'st')							: ('sh', newC[3]),	# /sh/ sound
+			('b', 'bb')										: ('zh', newC[4]),	# /z/ sound
+			('z', 'se', 'ss', 'ze')							: ('ch', newC[5]),	# /p/ sound
+			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('th', newC[6]),  # /d/ sound
+			('ch', 'tch')									: ('ng', newC[7]),  # /th/ sound
+			('sh', 'sci')									: ('KH', KA),	# /b/
+
+			('u')											: ('i', i),  # /o/,/y/ sound
+			('i', 'ie', 'ui')								: ('ou', oo),	# /u/ sound
+			('oo', 'ou')									: ('uh', u),  # /i/ sound
+			('e', 'eo', 'ei', 'ae', 'ay')					: ('a', a),  # /e/ sound
+			('o', 'ho', 'y')								: ('ah', ah),  # /o/,/y/ sound
+			('a', 'ea',)									: ('eh', e),  # /a/ sound, short a
+
+			('ew')											: ('ī', newV[0]),	# /ō/ sound
+			('igh', 'i-e')									: ('oy', newV[1]),	# /ü/ sound
+			('oi', 'oy', 'uoy')								: ('ew', newV[2]),	# /ī/ sound
+			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[3]),	# /ē/ sound
+			('oa', 'o-e', 'ow')								: ('ō', newV[4]),  # /oi/ sound
+			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[5]),	# /ā/ sound
 		#special chars
 			' '	: (' ', space),												
 			'('	: ('(', space),												
