@@ -88,9 +88,9 @@ class UI(QMainWindow):
 		initialData = {
 			('v', 'ph')										: ('rr', rr),	# /n/ sound
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('d', d),  # /ch/ sound
-			('r', 'rr', 'wr', 'rh')							: ('l', l),  # /r/ sound
+			('s', 'sc', 'ps', 'st')							: ('l', l),  # /r/ sound
 
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')	 		: ('h', h),  # /v/ sound
+			('b', 'bb')								 		: ('h', h),  # /v/ sound
 			('h')											: ('v', v),  # /p/ sound
 			('t', 'tt')										: ('g', g),  # /g/ sound
 			('f', 'ff', 'gh', 'lf', 'ft')					: ('s', s),  # /k/ sound
@@ -100,26 +100,27 @@ class UI(QMainWindow):
 			('d', 'dd', 'ed')								: ('n', n),  # /d/ sound
 
 			('j', 'ge', 'dge', 'gg')						: ('w', newC[0]),	# /f/ sound
-			('w', 'wh')										: ('f', newC[1]),	# /j/ sound
+			('r', 'rr', 'wr', 'rh')							: ('f', newC[1]),	# /j/ sound
 			('th')											: ('j', newC[2]),	# /m/ sound
-			('s', 'sc', 'ps', 'st')							: ('sh', newC[3]),	# /sh/ sound
-			('b', 'bb')										: ('zh', newC[4]),	# /z/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('sh', newC[3]),	# /sh/ sound
+			('w', 'wh')										: ('zh', newC[4]),	# /z/ sound
 			('z', 'se', 'ss', 'ze')							: ('ch', newC[5]),	# /p/ sound
 			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('th', newC[6]),  # /d/ sound
 			('ch', 'tch')									: ('ng', newC[7]),  # /th/ sound
 			('sh', 'sci')									: ('KH', KA),	# /b/
 
-			('u')											: ('i', i),  # /o/,/y/ sound
-			('i', 'ie', 'ui')								: ('ou', oo),	# /u/ sound
-			('oo', 'ou')									: ('uh', u),  # /i/ sound
-			('e', 'eo', 'ei', 'ae', 'ay')					: ('a', a),  # /e/ sound
-			('o', 'ho', 'y')								: ('ah', ah),  # /o/,/y/ sound
-			('a', 'ea',)									: ('eh', e),  # /a/ sound, short a
+			('u')											: ('ou', oo),	# /u/ sound
+			('i', 'ie', 'ui','io')							: ('i', i),  # /o/,/y/ sound
+			('oo', 'ou')									: ('ah', ah),  # /o/,/y/ sound
+			('e', 'eo', 'ei', 'ae', 'ay')					: ('eh', e),  # /a/ sound, short a
+			('o', 'ho', 'y')								: ('uh', u),  # /i/ sound
+			('a', 'ea')										: ('a', a),  # /e/ sound
 
+			('igh', 'i-e')									: ('y', newV[1]),	# /ü/ sound
 			('ew')											: ('ī', newV[0]),	# /ō/ sound
-			('igh', 'i-e')									: ('oy', newV[1]),	# /ü/ sound
 			('oi', 'oy', 'uoy')								: ('ew', newV[2]),	# /ī/ sound
 			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[3]),	# /ē/ sound
+
 			('oa', 'o-e', 'ow')								: ('ō', newV[4]),  # /oi/ sound
 			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[5]),	# /ā/ sound
 		#special chars
