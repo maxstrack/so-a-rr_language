@@ -90,7 +90,7 @@ class UI(QMainWindow):
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('d', d),  # /ch/ sound
 			('s', 'sc', 'ps', 'st')							: ('l', l),  # /r/ sound
 
-			('b', 'bb')								 		: ('h', h),  # /v/ sound
+			('b', 'bb')										: ('h', h),  # /v/ sound
 			('h')											: ('v', v),  # /p/ sound
 			('t', 'tt')										: ('g', g),  # /g/ sound
 			('f', 'ff', 'gh', 'lf', 'ft')					: ('s', s),  # /k/ sound
@@ -104,9 +104,9 @@ class UI(QMainWindow):
 			('th')											: ('j', newC[2]),	# /m/ sound
 			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('sh', newC[3]),	# /sh/ sound
 			('w', 'wh')										: ('zh', newC[4]),	# /z/ sound
-			('z', 'se', 'ss', 'ze')							: ('ch', newC[5]),	# /p/ sound
-			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('th', newC[6]),  # /d/ sound
-			('ch', 'tch')									: ('ng', newC[7]),  # /th/ sound
+			('z', 'ss', 'ze')							: ('ch', newC[5]),	# /p/ sound
+			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('th', newC[6]),	# /d/ sound
+			('ch', 'tch')									: ('ng', newC[7]),	# /th/ sound
 			('sh', 'sci')									: ('KH', KA),	# /b/
 
 			('u')											: ('ou', oo),	# /u/ sound
@@ -125,10 +125,14 @@ class UI(QMainWindow):
 			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[5]),	# /ā/ sound
 		#special chars
 			' '	: (' ', space),												
+
 			'('	: ('(', space),												
 			')'	: (')', space),												
 			','	: (',', space),												
-			'~' : ('~', space),
+
+			'~' : ('~', space), #no practical use, only in backend
+
+			'@' : ('~', space),
 		}
 
 
@@ -298,6 +302,72 @@ class UI(QMainWindow):
 
 		print("Image Saved")
 
+	def getCircularPixmap(self, subList):
+		if not subList:
+			return
+
+		# 1) collect widths/heights
+		widths  = [pix.width()  for _, pix in subList]
+		heights = [pix.height() for _, pix in subList]
+
+		# 2) helper to sum half‐chord angles (∑ asin(w/(2r)) should = π)
+		def sum_half(r):
+			return sum(math.asin(w/(2*r)) for w in widths)
+
+		# 3) find r by binary search so that ∑(2·asin(w/(2r))) = 2π  ⇒ ∑asin(...) = π
+		low  = max(w/2 for w in widths) + 1e-3
+		high = low * 2
+		while sum_half(high) > math.pi:
+			high *= 2
+		for _ in range(40):
+			mid = (low + high) / 2
+			if sum_half(mid) > math.pi:
+				low = mid
+			else:
+				high = mid
+		r = (low + high) / 2
+
+		# 4) prep the QPixmap
+		max_h   = max(heights)
+		diameter = int(2 * (r + max_h)) + 20
+		disp     = QPixmap(diameter, diameter)
+		disp.fill(Qt.transparent)
+
+		painter = QPainter(disp)
+		painter.setRenderHint(QPainter.Antialiasing)
+		painter.setRenderHint(QPainter.SmoothPixmapTransform)
+
+		cx, cy   = diameter/2, diameter/2
+		angle_acc = 0.0
+
+		# 5) place each pixmap
+		for _, pix in subList:
+			w, h = pix.width(), pix.height()
+			half = math.asin(w / (2*r))           # half the chord angle
+			phi_start = angle_acc
+			phi_mid   = phi_start + half
+
+			# world coord of the LEFT‐side midpoint on the circle
+			x0 = cx + r * math.cos(phi_start)
+			y0 = cy + r * math.sin(phi_start)
+			# (if it comes out mirrored vertically, change to cy - r*sin(phi_start))
+
+			# rotate so local +Y (“bottom”) points toward center:
+			rot_deg = math.degrees(phi_mid + math.pi/2)
+			# (if direction is flipped, try rot_deg = -rot_deg)
+
+			painter.save()
+			painter.translate(x0, y0)       # pivot at left‐side midpoint
+			painter.rotate(rot_deg)         # orient bottom inward
+			painter.translate(0, -h/2)      # move local (0,h/2) → (0,0)
+			painter.drawPixmap(0, 0, pix)   # draw with left‐midpoint now on the circle
+			painter.restore()
+
+			angle_acc += 2 * half
+
+		painter.end()
+		return disp, disp.height()//2
+		
 	# Converts a list of letter tupes into a pixmap
 	def getSubPixmap(self, subList, enunc=None):
 		if enunc is None:
@@ -517,7 +587,13 @@ class UI(QMainWindow):
 				return
 
 
-		#disp = self.gutSubPixmap(convertedList)
+		try: 
+			(disp, _) = self.getCircularPixmap(convertedList)
+			disp = self.replaceImageColor(disp)
+			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+		except:
+			return
+		'''
 		try: 
 			splitList = self.parseParentheses(convertedList)
 			(disp, _) = self.getPixmap(splitList)
@@ -526,6 +602,7 @@ class UI(QMainWindow):
 
 		disp = self.replaceImageColor(disp)
 		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+		'''
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
