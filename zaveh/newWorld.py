@@ -55,6 +55,26 @@ class UI(QMainWindow):
 
 		numStart = QPixmap("../letters/numStart.png")
 		numEnd = QPixmap("../letters/numEnd.png")
+
+		ahg = QPixmap("../letters/mod/ahg.png")
+		de = QPixmap("../letters/mod/de.png")
+		do = QPixmap("../letters/mod/do.png")
+		fi = QPixmap("../letters/mod/fi.png")
+		he = QPixmap("../letters/mod/he.png")
+		iloh = QPixmap("../letters/mod/iloh.png")
+		itu = QPixmap("../letters/mod/itu.png")
+		luh = QPixmap("../letters/mod/luh.png")
+		neh = QPixmap("../letters/mod/neh.png")
+		ouleh = QPixmap("../letters/mod/ouleh.png")
+		re = QPixmap("../letters/mod/re.png")
+		ret = QPixmap("../letters/mod/ret.png")
+		ro = QPixmap("../letters/mod/ro.png")
+		so = QPixmap("../letters/mod/so.png")
+		tah = QPixmap("../letters/mod/tah.png")
+		uta = QPixmap("../letters/mod/uta.png")
+		vig = QPixmap("../letters/mod/vig.png")
+		zou = QPixmap("../letters/mod/zou.png")
+
 		'''
 		print("ah  exists: ",os.path.exists("../letters/ah.png"))
 		print("a exists: ",os.path.exists("../letters/a.png"))
@@ -132,7 +152,24 @@ class UI(QMainWindow):
 
 			'~' : ('~', space), #no practical use, only in backend
 
-			'@' : ('~', space),
+			'@ahg|' 	: ('ahg', ahg),	#end var
+			'@de|' 	: ('de', de),	#location
+			'@do|' 	: ('do', do),	#undecide
+			'@fi|' 	: ('fi', fi),	# start var
+			'@he|' 	: ('he', he),	#union
+			'@iloh|' : ('iloh', iloh),#negative thing
+			'@itu|' 	: ('itu', itu),	#because
+			'@luh|' 	: ('luh', luh), #action
+			'@neh|' 	: ('neh', neh),	#intersection
+			'@ouleh|' : ('ouleh', ouleh),#for
+			'@re|' 	: ('re', re),	#past
+			'@ret|' 	: ('ret', ret), #new Thought
+			'@ro|' 	: ('ro', ro),	#future
+			'@so|' 	: ('so', so),	#not
+			'@tah|' 	: ('tah', tah), #trait
+			'@uta|' 	: ('uta', uta), #to
+			'@vig|' 	: ('vig', vig),	#set var
+			'@zou|' 	: ('zou', zou),	#this
 		}
 
 
