@@ -25,10 +25,13 @@ class UI(QMainWindow):
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
 		self.splitLineEdit.textChanged.connect(self.changeAngle)
-		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d h th a ai e ea i igh o oa u ew oo oi b "))
+		self.boldEdit.textChanged.connect(self.convert)
+		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d h th a ai e ea i igh o oa u ew oo oi b @ahg| @de| @do| @fi| @he| @iloh| @itu| @luh| @neh| @ouleh| @re| @ret| @ro| @so| @tah| @uta| @vig| @zou|"))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
 		self.menuEnunciation.triggered.connect(self.changeEnunc)
 		self.menuChangeColor.triggered.connect(self.changeImageColor)
+		self.menuSetStraight.triggered.connect(lambda: self.onSetLine(False))
+		self.menuSetCircle.triggered.connect(lambda: self.onSetLine(True))
 
 	def initVariables(self):
 		ah = QPixmap("../letters/oo.png")
@@ -152,24 +155,24 @@ class UI(QMainWindow):
 
 			'~' : ('~', space), #no practical use, only in backend
 
-			'@ahg|' 	: ('ahg', ahg),	#end var
-			'@de|' 	: ('de', de),	#location
-			'@do|' 	: ('do', do),	#undecide
-			'@fi|' 	: ('fi', fi),	# start var
-			'@he|' 	: ('he', he),	#union
+			'@ahg|'		: ('ahg', ahg),	#end var
+			'@de|'	: ('de', de),	#location
+			'@do|'	: ('do', do),	#undecide
+			'@fi|'	: ('fi', fi),	# start var
+			'@he|'	: ('he', he),	#union
 			'@iloh|' : ('iloh', iloh),#negative thing
-			'@itu|' 	: ('itu', itu),	#because
-			'@luh|' 	: ('luh', luh), #action
-			'@neh|' 	: ('neh', neh),	#intersection
+			'@itu|'		: ('itu', itu),	#because
+			'@luh|'		: ('luh', luh), #action
+			'@neh|'		: ('neh', neh),	#intersection
 			'@ouleh|' : ('ouleh', ouleh),#for
-			'@re|' 	: ('re', re),	#past
-			'@ret|' 	: ('ret', ret), #new Thought
-			'@ro|' 	: ('ro', ro),	#future
-			'@so|' 	: ('so', so),	#not
-			'@tah|' 	: ('tah', tah), #trait
-			'@uta|' 	: ('uta', uta), #to
-			'@vig|' 	: ('vig', vig),	#set var
-			'@zou|' 	: ('zou', zou),	#this
+			'@re|'	: ('re', re),	#past
+			'@ret|'		: ('ret', ret), #new Thought
+			'@ro|'	: ('ro', ro),	#future
+			'@so|'	: ('so', so),	#not
+			'@tah|'		: ('tah', tah), #trait
+			'@uta|'		: ('uta', uta), #to
+			'@vig|'		: ('vig', vig),	#set var
+			'@zou|'		: ('zou', zou),	#this
 		}
 
 
@@ -201,11 +204,17 @@ class UI(QMainWindow):
 		# bool for Enunciation
 		self.enuncBool = True
 
+		self.lineType = False # Start on line
+
 		# Color for letter font
 		self.color = QColor("white")
 
 		# Degree for angle split
 		self.totalAngle = 90
+
+	def onSetLine(self, lineType):
+		self.lineType = lineType
+		self.convert()
 
 	# takes the english string, replaces all numbers with ~ 
 	# Then returns new string and list of base 17 numbers
@@ -318,6 +327,45 @@ class UI(QMainWindow):
 		self.color = QColorDialog.getColor()
 		self.convert()
 		
+	def boldPixmap(self, pixmap):
+		try:
+			r = int(self.boldEdit.text())
+		except: 
+			r = 0
+
+		r = min(r, 20)
+
+		if r == 0:
+			return pixmap
+
+		img = pixmap.toImage().convertToFormat(QImage.Format.Format_ARGB32)
+		w, h = img.width(), img.height()
+
+		ptr = img.bits()
+		ptr.setsize(h * img.bytesPerLine())
+		data = np.frombuffer(ptr, dtype=np.uint8)
+		data = data.reshape((h, img.bytesPerLine()))[:, : w * 4]
+		rgba = data.reshape((h, w, 4)).copy()
+
+		alpha = rgba[:, :, 3]
+
+		# Dilate alpha channel
+		padded = np.pad(alpha, r)
+		dilated = np.zeros_like(alpha)
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				dilated = np.maximum(
+					dilated,
+					padded[r + dy : r + dy + h, r + dx : r + dx + w]
+				)
+
+		# Build output: black RGB + dilated alpha
+		out = np.zeros_like(rgba)
+		out[:, :, 3] = dilated
+
+		out_img = QImage(out.data, w, h, w * 4, QImage.Format.Format_ARGB32)
+		return QPixmap.fromImage(out_img)
+
 	# Saved the rendered image as a png
 	def savePixmap(self):
 		# Makes the file
@@ -344,7 +392,7 @@ class UI(QMainWindow):
 			return
 
 		# 1) collect widths/heights
-		widths  = [pix.width()  for _, pix in subList]
+		widths	= [pix.width()	for _, pix in subList]
 		heights = [pix.height() for _, pix in subList]
 
 		# 2) helper to sum half‐chord angles (∑ asin(w/(2r)) should = π)
@@ -365,22 +413,22 @@ class UI(QMainWindow):
 		r = (low + high) / 2
 
 		# 4) prep the QPixmap
-		max_h   = max(heights)
+		max_h	= max(heights)
 		diameter = int(2 * (r + max_h)) + 20
-		disp     = QPixmap(diameter, diameter)
+		disp	 = QPixmap(diameter, diameter)
 		disp.fill(Qt.transparent)
 
 		painter = QPainter(disp)
 		painter.setRenderHint(QPainter.Antialiasing)
 		painter.setRenderHint(QPainter.SmoothPixmapTransform)
 
-		cx, cy   = diameter/2, diameter/2
+		cx, cy	 = diameter/2, diameter/2
 		angle_acc = 0.0
 
 		# 5) place each pixmap
 		for _, pix in subList:
 			w, h = pix.width(), pix.height()
-			half = math.asin(w / (2*r))           # half the chord angle
+			half = math.asin(w / (2*r))			  # half the chord angle
 			phi_start = angle_acc
 			phi_mid   = phi_start + half
 
@@ -394,10 +442,10 @@ class UI(QMainWindow):
 			# (if direction is flipped, try rot_deg = -rot_deg)
 
 			painter.save()
-			painter.translate(x0, y0)       # pivot at left‐side midpoint
-			painter.rotate(rot_deg)         # orient bottom inward
-			painter.translate(0, -h/2)      # move local (0,h/2) → (0,0)
-			painter.drawPixmap(0, 0, pix)   # draw with left‐midpoint now on the circle
+			painter.translate(x0, y0)		# pivot at left‐side midpoint
+			painter.rotate(rot_deg)			# orient bottom inward
+			painter.translate(0, -h/2)		# move local (0,h/2) → (0,0)
+			painter.drawPixmap(0, 0, pix)	# draw with left‐midpoint now on the circle
 			painter.restore()
 
 			angle_acc += 2 * half
@@ -624,22 +672,23 @@ class UI(QMainWindow):
 				return
 
 
-		try: 
-			(disp, _) = self.getCircularPixmap(convertedList)
+		if self.lineType == True:
+			try: 
+				(disp, _) = self.getCircularPixmap(convertedList)
+				disp = self.replaceImageColor(disp)
+				self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+			except:
+				return
+		else:
+			try: 
+				splitList = self.parseParentheses(convertedList)
+				(disp, _) = self.getPixmap(splitList)
+			except:
+				(disp, _) = self.getSubPixmap(convertedList)
+
+			disp = self.boldPixmap(disp)
 			disp = self.replaceImageColor(disp)
 			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
-		except:
-			return
-		'''
-		try: 
-			splitList = self.parseParentheses(convertedList)
-			(disp, _) = self.getPixmap(splitList)
-		except:
-			(disp, _) = self.getSubPixmap(convertedList)
-
-		disp = self.replaceImageColor(disp)
-		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
-		'''
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
