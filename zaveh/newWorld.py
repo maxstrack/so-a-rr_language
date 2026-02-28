@@ -25,10 +25,13 @@ class UI(QMainWindow):
 		# Connect the textChanged signal to the slot
 		self.engOut.textChanged.connect(self.convert)
 		self.splitLineEdit.textChanged.connect(self.changeAngle)
-		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d h th a ai e ea i igh o oa u ew oo oi b "))
+		self.boldEdit.textChanged.connect(self.convert)
+		self.allLetters.triggered.connect(lambda: self.engOut.setText("k f t j l m w sh ng z v p n r ch s d h th a ai e ea i igh o oa u ew oo oi b @ahg| @de| @do| @fi| @he| @iloh| @itu| @luh| @neh| @ouleh| @re| @ret| @ro| @so| @tah| @uta| @vig| @zou|"))
 		self.menuSaveImage.triggered.connect(self.savePixmap)
 		self.menuEnunciation.triggered.connect(self.changeEnunc)
 		self.menuChangeColor.triggered.connect(self.changeImageColor)
+		self.menuSetStraight.triggered.connect(lambda: self.onSetLine(False))
+		self.menuSetCircle.triggered.connect(lambda: self.onSetLine(True))
 
 	def initVariables(self):
 		ah = QPixmap("../letters/oo.png")
@@ -55,6 +58,26 @@ class UI(QMainWindow):
 
 		numStart = QPixmap("../letters/numStart.png")
 		numEnd = QPixmap("../letters/numEnd.png")
+
+		ahg = QPixmap("../letters/mod/ahg.png")
+		de = QPixmap("../letters/mod/de.png")
+		do = QPixmap("../letters/mod/do.png")
+		fi = QPixmap("../letters/mod/fi.png")
+		he = QPixmap("../letters/mod/he.png")
+		iloh = QPixmap("../letters/mod/iloh.png")
+		itu = QPixmap("../letters/mod/itu.png")
+		luh = QPixmap("../letters/mod/luh.png")
+		neh = QPixmap("../letters/mod/neh.png")
+		ouleh = QPixmap("../letters/mod/ouleh.png")
+		re = QPixmap("../letters/mod/re.png")
+		ret = QPixmap("../letters/mod/ret.png")
+		ro = QPixmap("../letters/mod/ro.png")
+		so = QPixmap("../letters/mod/so.png")
+		tah = QPixmap("../letters/mod/tah.png")
+		uta = QPixmap("../letters/mod/uta.png")
+		vig = QPixmap("../letters/mod/vig.png")
+		zou = QPixmap("../letters/mod/zou.png")
+
 		'''
 		print("ah  exists: ",os.path.exists("../letters/ah.png"))
 		print("a exists: ",os.path.exists("../letters/a.png"))
@@ -80,54 +103,76 @@ class UI(QMainWindow):
 		'''
 
 		# Make Lists of the new consonant and vowle pixmaps
-		consonants = [s, n, t, z, k, h, v, g]
+		consonants = [h, v, g, s, z, k, t, n] 
 		newC = self.paintNewMaps(consonants, consonant) 
-		vowles = [e, a, u, i, oo, ah]
+		vowles = [i, oo, u, a, ah, e]
 		newV = self.paintNewMaps(vowles, vowle) 
-	
+
 		initialData = {
-		# consonants
-			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('s', s),  # /k/ sound
-			('t', 'tt')										: ('n', n),  # /t/ sound
+			('v', 'ph')										: ('rr', rr),	# /n/ sound
+			('m', 'mm', 'mb', 'mn', 'lm')					: ('d', d),  # /ch/ sound
+			('s', 'sc', 'ps', 'st')							: ('l', l),  # /r/ sound
+
+			('b', 'bb')										: ('h', h),  # /v/ sound
+			('h')											: ('v', v),  # /p/ sound
+			('t', 'tt')										: ('g', g),  # /g/ sound
+			('f', 'ff', 'gh', 'lf', 'ft')					: ('s', s),  # /k/ sound
+			('p', 'pp')										: ('z', z),  # /w/,/h/ sound
+			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('k', k),  # /ng/,/g/ sound
 			('l', 'll')										: ('t', t),  # /l/ sound
-			('w', 'wh')										: ('z', z),  # /w/,/h/ sound
-			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('k', k),  # /ng/,/g/ sound
-			('v', 'ph',)									: ('h', h),  # /v/ sound
-			('s', 'sc', 'ps', 'st')							: ('v', v),  # /s/ sound
-			('h')											: ('g', g),  # /p/ sound
-			('n', 'nn', 'kn', 'gn', 'pn', 'x')				: ('rr', rr),	# /n/ sound
-			('r', 'rr', 'wr', 'rh')							: ('l', l),  # /r/ sound
-			('ch', 'tch')									: ('d', d),  # /ch/ sound
-		# digraphs
-			('f', 'ff', 'gh', 'lf', 'ft')					: ('sh', newC[0]),	# /f/ sound
-			('j', 'ge', 'dge', 'gg')						: ('ng', newC[1]),	# /j/ sound
-			('m', 'mm', 'mb', 'mn', 'lm')					: ('th', newC[2]),	# /m/ sound
-			('sh', 'sci')									: ('zh', newC[3]),	# /sh/ sound
-			('z', 'se', 'ss', 'ze')							: ('ch', newC[4]),	# /z/ sound
-			('p', 'pp')										: ('w', newC[5]),	# /p/ sound
-			('d', 'dd', 'ed')								: ('f', newC[6]),  # /d/ sound
-			('th')											: ('j', newC[7]),  # /th/ sound
-			('b', 'bb')										: ('KH', KA),	# /b/
-		# vowels
-			('a', 'ea',)									: ('eh', e),  # /a/ sound (short a)
-			('e', 'eo', 'ei', 'ae', 'ay', 'a')				: ('a', a),  # /e/ sound
-			('i', 'ie', 'ui')								: ('uh', u),  # /i/ sound
-			('o', 'ho', 'y')								: ('i', i),  # /o/,/y/ sound
+			('d', 'dd', 'ed')								: ('n', n),  # /d/ sound
+
+			('j', 'ge', 'dge', 'gg')						: ('w', newC[0]),	# /f/ sound
+			('r', 'rr', 'wr', 'rh')							: ('f', newC[1]),	# /j/ sound
+			('th')											: ('j', newC[2]),	# /m/ sound
+			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('sh', newC[3]),	# /sh/ sound
+			('w', 'wh')										: ('zh', newC[4]),	# /z/ sound
+			('z', 'ss', 'ze')							: ('ch', newC[5]),	# /p/ sound
+			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('th', newC[6]),	# /d/ sound
+			('ch', 'tch')									: ('ng', newC[7]),	# /th/ sound
+			('sh', 'sci')									: ('KH', KA),	# /b/
+
 			('u')											: ('ou', oo),	# /u/ sound
-			('oo', 'ou')									: ('ah', ah),	# /oo/ sound (short oo)
-		#long_vowels
-			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[0]),	# /ā/ sound
-			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[1]),	# /ē/ sound
-			('igh', 'i-e')									: ('ew', newV[2]),	# /ī/ sound
-			('oa', 'o-e', 'ow')								: ('ī', newV[3]),	# /ō/ sound
-			('ew')											: ('oy', newV[4]),	# /ü/ sound
-			('oi', 'oy', 'uoy')								: ('ō', newV[5]),  # /oi/ sound
+			('i', 'ie', 'ui','io')							: ('i', i),  # /o/,/y/ sound
+			('oo', 'ou')									: ('ah', ah),  # /o/,/y/ sound
+			('e', 'eo', 'ei', 'ae', 'ay')					: ('eh', e),  # /a/ sound, short a
+			('o', 'ho', 'y')								: ('uh', u),  # /i/ sound
+			('a', 'ea')										: ('a', a),  # /e/ sound
+
+			('igh', 'i-e')									: ('y', newV[1]),	# /ü/ sound
+			('ew')											: ('ī', newV[0]),	# /ō/ sound
+			('oi', 'oy', 'uoy')								: ('ew', newV[2]),	# /ī/ sound
+			('ea', 'ee', 'ie', 'ei', 'y')					: ('ay', newV[3]),	# /ē/ sound
+
+			('oa', 'o-e', 'ow')								: ('ō', newV[4]),  # /oi/ sound
+			('ai', 'eigh', 'ay', 'a-e')						: ('ie', newV[5]),	# /ā/ sound
 		#special chars
 			' '	: (' ', space),												
+
 			'('	: ('(', space),												
 			')'	: (')', space),												
 			','	: (',', space),												
-			'~' : ('~', space),
+
+			'~' : ('~', space), #no practical use, only in backend
+
+			'@ahg|'		: ('ahg', ahg),	#end var
+			'@de|'	: ('de', de),	#location
+			'@do|'	: ('do', do),	#undecide
+			'@fi|'	: ('fi', fi),	# start var
+			'@he|'	: ('he', he),	#union
+			'@iloh|' : ('iloh', iloh),#negative thing
+			'@itu|'		: ('itu', itu),	#because
+			'@luh|'		: ('luh', luh), #action
+			'@neh|'		: ('neh', neh),	#intersection
+			'@ouleh|' : ('ouleh', ouleh),#for
+			'@re|'	: ('re', re),	#past
+			'@ret|'		: ('ret', ret), #new Thought
+			'@ro|'	: ('ro', ro),	#future
+			'@so|'	: ('so', so),	#not
+			'@tah|'		: ('tah', tah), #trait
+			'@uta|'		: ('uta', uta), #to
+			'@vig|'		: ('vig', vig),	#set var
+			'@zou|'		: ('zou', zou),	#this
 		}
 
 
@@ -159,11 +204,17 @@ class UI(QMainWindow):
 		# bool for Enunciation
 		self.enuncBool = True
 
+		self.lineType = False # Start on line
+
 		# Color for letter font
 		self.color = QColor("white")
 
 		# Degree for angle split
 		self.totalAngle = 90
+
+	def onSetLine(self, lineType):
+		self.lineType = lineType
+		self.convert()
 
 	# takes the english string, replaces all numbers with ~ 
 	# Then returns new string and list of base 17 numbers
@@ -276,6 +327,45 @@ class UI(QMainWindow):
 		self.color = QColorDialog.getColor()
 		self.convert()
 		
+	def boldPixmap(self, pixmap):
+		try:
+			r = int(self.boldEdit.text())
+		except: 
+			r = 0
+
+		r = min(r, 20)
+
+		if r == 0:
+			return pixmap
+
+		img = pixmap.toImage().convertToFormat(QImage.Format.Format_ARGB32)
+		w, h = img.width(), img.height()
+
+		ptr = img.bits()
+		ptr.setsize(h * img.bytesPerLine())
+		data = np.frombuffer(ptr, dtype=np.uint8)
+		data = data.reshape((h, img.bytesPerLine()))[:, : w * 4]
+		rgba = data.reshape((h, w, 4)).copy()
+
+		alpha = rgba[:, :, 3]
+
+		# Dilate alpha channel
+		padded = np.pad(alpha, r)
+		dilated = np.zeros_like(alpha)
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				dilated = np.maximum(
+					dilated,
+					padded[r + dy : r + dy + h, r + dx : r + dx + w]
+				)
+
+		# Build output: black RGB + dilated alpha
+		out = np.zeros_like(rgba)
+		out[:, :, 3] = dilated
+
+		out_img = QImage(out.data, w, h, w * 4, QImage.Format.Format_ARGB32)
+		return QPixmap.fromImage(out_img)
+
 	# Saved the rendered image as a png
 	def savePixmap(self):
 		# Makes the file
@@ -297,6 +387,72 @@ class UI(QMainWindow):
 
 		print("Image Saved")
 
+	def getCircularPixmap(self, subList):
+		if not subList:
+			return
+
+		# 1) collect widths/heights
+		widths	= [pix.width()	for _, pix in subList]
+		heights = [pix.height() for _, pix in subList]
+
+		# 2) helper to sum half‐chord angles (∑ asin(w/(2r)) should = π)
+		def sum_half(r):
+			return sum(math.asin(w/(2*r)) for w in widths)
+
+		# 3) find r by binary search so that ∑(2·asin(w/(2r))) = 2π  ⇒ ∑asin(...) = π
+		low  = max(w/2 for w in widths) + 1e-3
+		high = low * 2
+		while sum_half(high) > math.pi:
+			high *= 2
+		for _ in range(40):
+			mid = (low + high) / 2
+			if sum_half(mid) > math.pi:
+				low = mid
+			else:
+				high = mid
+		r = (low + high) / 2
+
+		# 4) prep the QPixmap
+		max_h	= max(heights)
+		diameter = int(2 * (r + max_h)) + 20
+		disp	 = QPixmap(diameter, diameter)
+		disp.fill(Qt.transparent)
+
+		painter = QPainter(disp)
+		painter.setRenderHint(QPainter.Antialiasing)
+		painter.setRenderHint(QPainter.SmoothPixmapTransform)
+
+		cx, cy	 = diameter/2, diameter/2
+		angle_acc = 0.0
+
+		# 5) place each pixmap
+		for _, pix in subList:
+			w, h = pix.width(), pix.height()
+			half = math.asin(w / (2*r))			  # half the chord angle
+			phi_start = angle_acc
+			phi_mid   = phi_start + half
+
+			# world coord of the LEFT‐side midpoint on the circle
+			x0 = cx + r * math.cos(phi_start)
+			y0 = cy + r * math.sin(phi_start)
+			# (if it comes out mirrored vertically, change to cy - r*sin(phi_start))
+
+			# rotate so local +Y (“bottom”) points toward center:
+			rot_deg = math.degrees(phi_mid + math.pi/2)
+			# (if direction is flipped, try rot_deg = -rot_deg)
+
+			painter.save()
+			painter.translate(x0, y0)		# pivot at left‐side midpoint
+			painter.rotate(rot_deg)			# orient bottom inward
+			painter.translate(0, -h/2)		# move local (0,h/2) → (0,0)
+			painter.drawPixmap(0, 0, pix)	# draw with left‐midpoint now on the circle
+			painter.restore()
+
+			angle_acc += 2 * half
+
+		painter.end()
+		return disp, disp.height()//2
+		
 	# Converts a list of letter tupes into a pixmap
 	def getSubPixmap(self, subList, enunc=None):
 		if enunc is None:
@@ -516,15 +672,23 @@ class UI(QMainWindow):
 				return
 
 
-		#disp = self.gutSubPixmap(convertedList)
-		try: 
-			splitList = self.parseParentheses(convertedList)
-			(disp, _) = self.getPixmap(splitList)
-		except:
-			(disp, _) = self.getSubPixmap(convertedList)
+		if self.lineType == True:
+			try: 
+				(disp, _) = self.getCircularPixmap(convertedList)
+				disp = self.replaceImageColor(disp)
+				self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+			except:
+				return
+		else:
+			try: 
+				splitList = self.parseParentheses(convertedList)
+				(disp, _) = self.getPixmap(splitList)
+			except:
+				(disp, _) = self.getSubPixmap(convertedList)
 
-		disp = self.replaceImageColor(disp)
-		self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
+			disp = self.boldPixmap(disp)
+			disp = self.replaceImageColor(disp)
+			self.graphicsView.scene().addPixmap(disp.scaled(disp.width() // 2, disp.height() // 2))
 	
 	def parseParentheses(self, tuplesList):
 		def helper(index):
