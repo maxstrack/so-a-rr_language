@@ -111,7 +111,7 @@ class UI(QMainWindow):
 		initialData = {
 			('v', 'ph')										: ('rr', rr),	# /n/ sound
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('d', d),  # /ch/ sound
-			('s', 'sc', 'ps', 'st')							: ('l', l),  # /r/ sound
+			('s', 'sh', 'sc', 'ps', 'st')							: ('l', l),  # /r/ sound
 
 			('b', 'bb')										: ('h', h),  # /v/ sound
 			('h')											: ('v', v),  # /p/ sound
@@ -127,10 +127,10 @@ class UI(QMainWindow):
 			('th')											: ('j', newC[2]),	# /m/ sound
 			('ng', 'ngue', 'g', 'gg', 'gh', 'gue')			: ('sh', newC[3]),	# /sh/ sound
 			('w', 'wh')										: ('zh', newC[4]),	# /z/ sound
-			('z', 'ss', 'ze')							: ('ch', newC[5]),	# /p/ sound
+			('z', 'ss')										: ('ch', newC[5]),	# /p/ sound
 			('k', 'c', 'qu', 'ck', 'lk', 'q', 'cc', 'cqu')	: ('th', newC[6]),	# /d/ sound
 			('ch', 'tch')									: ('ng', newC[7]),	# /th/ sound
-			('sh', 'sci')									: ('KH', KA),	# /b/
+			#('sh', 'sci')									: ('KH', KA),	# /b/
 
 			('u')											: ('ou', oo),	# /u/ sound
 			('i', 'ie', 'ui','io')							: ('i', i),  # /o/,/y/ sound
@@ -156,19 +156,19 @@ class UI(QMainWindow):
 			'~' : ('~', space), #no practical use, only in backend
 
 			'@ahg|'		: ('ahg', ahg),	#end var
-			'@de|'	: ('de', de),	#location
-			'@do|'	: ('do', do),	#undecide
-			'@fi|'	: ('fi', fi),	# start var
-			'@he|'	: ('he', he),	#union
-			'@iloh|' : ('iloh', iloh),#negative thing
+			'@de|'		: ('de', de),	#location
+			'@do|'		: ('do', do),	#undecide
+			'@fi|'		: ('fi', fi),	# start var
+			'@he|'		: ('he', he),	#union
+			'@iloh|'	: ('iloh', iloh),#negative thing
 			'@itu|'		: ('itu', itu),	#because
 			'@luh|'		: ('luh', luh), #action
 			'@neh|'		: ('neh', neh),	#intersection
-			'@ouleh|' : ('ouleh', ouleh),#for
-			'@re|'	: ('re', re),	#past
+			'@ouleh|'	: ('ouleh', ouleh),#for
+			'@re|'		: ('re', re),	#past
 			'@ret|'		: ('ret', ret), #new Thought
-			'@ro|'	: ('ro', ro),	#future
-			'@so|'	: ('so', so),	#not
+			'@ro|'		: ('ro', ro),	#future
+			'@so|'		: ('so', so),	#not
 			'@tah|'		: ('tah', tah), #trait
 			'@uta|'		: ('uta', uta), #to
 			'@vig|'		: ('vig', vig),	#set var
@@ -194,8 +194,8 @@ class UI(QMainWindow):
 			'e' : ('e', rr),
 			'f' : ('f', i),
 			'g' : ('g', n),
-			'(' : ('', numStart),
-			')' : ('', numEnd),
+			'[' : ('', numStart),
+			']' : ('', numEnd),
 		}
 		# Make a new Dictionaries using AliasDict
 		self.convertDict = AliasDict(initialData)
