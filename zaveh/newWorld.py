@@ -12,6 +12,7 @@ import qdarkgraystyle
 from PyQt5.QtGui import QImage, QTransform
 
 from aliasDict import AliasDict
+from charToolbar import CharToolbar
 
 global padding
 padding = 2
@@ -32,6 +33,8 @@ class UI(QMainWindow):
 		self.menuChangeColor.triggered.connect(self.changeImageColor)
 		self.menuSetStraight.triggered.connect(lambda: self.onSetLine(False))
 		self.menuSetCircle.triggered.connect(lambda: self.onSetLine(True))
+
+		self.splitter_3.setSizes([10, 500])
 
 	def initVariables(self):
 		ah = QPixmap("../letters/oo.png")
@@ -111,7 +114,7 @@ class UI(QMainWindow):
 		initialData = {
 			('v', 'ph')										: ('rr', rr),	# /n/ sound
 			('m', 'mm', 'mb', 'mn', 'lm')					: ('d', d),  # /ch/ sound
-			('s', 'sh', 'sc', 'ps', 'st')							: ('l', l),  # /r/ sound
+			('s', 'sh', 'sc', 'ps', 'st')					: ('l', l),  # /r/ sound
 
 			('b', 'bb')										: ('h', h),  # /v/ sound
 			('h')											: ('v', v),  # /p/ sound
@@ -211,6 +214,124 @@ class UI(QMainWindow):
 
 		# Degree for angle split
 		self.totalAngle = 90
+
+		toolbarItems = [
+			{
+				"label": "Fi",
+				"char": "@fi|",
+				"tooltip": "<b>Fi</b><br>Set variable",
+				"pixmap": self.replaceImageColor(fi)
+			},
+			{
+				"label": "Ahg",
+				"char": "@ahg|",
+				"tooltip": "<b>Ahg</b><br>End definition",
+				"pixmap": self.replaceImageColor(ahg) 
+			},
+			{
+				"label": "Vig",
+				"char": "@vig|",
+				"tooltip": "<b>Vig</b><br>Drop back to previous def",
+				"pixmap": self.replaceImageColor(vig)
+			},
+			{
+				"label": "Tah",
+				"char": "@tah|",
+				"tooltip": "<b>Tah</b><br>Has a characteristic of",
+				"pixmap": self.replaceImageColor(tah)
+			},
+						{
+				"label": "Luh",
+				"char": "@luh|",
+				"tooltip": "<b>luh</b><br>Takes an action of",
+				"pixmap": self.replaceImageColor(luh)
+			},
+			{
+				"label": "Uta",
+				"char": "@uta|",
+				"tooltip": "<b>Uta</b><br>To",
+				"pixmap": self.replaceImageColor(uta)
+			},
+			{
+				"label": "Itu",
+				"char": "@itu|",
+				"tooltip": "<b>Itu</b><br>From",
+				"pixmap": self.replaceImageColor(itu)
+			},
+			{
+				"label": "Ouleh",
+				"char": "@ouleh|",
+				"tooltip": "<b>Ouleh</b><br>For",
+				"pixmap": self.replaceImageColor(ouleh)
+			},
+			{
+				"label": "Iloh",
+				"char": "@iloh|",
+				"tooltip": "<b>Iloh</b><br>Because of",
+				"pixmap": self.replaceImageColor(iloh)
+			},
+			{
+				"label": "He",
+				"char": "@he|",
+				"tooltip": "<b>He</b><br>And",
+				"pixmap": self.replaceImageColor(he)
+			},
+			{
+				"label": "Neh",
+				"char": "@neh|",
+				"tooltip": "<b>Neh</b><br>Excluding",
+				"pixmap": self.replaceImageColor(neh)
+			},
+			{
+				"label": "Re",
+				"char": "@re|",
+				"tooltip": "<b>Re</b><br>In the future",
+				"pixmap": self.replaceImageColor(re)
+			},
+			{
+				"label": "Ro",
+				"char": "@ro|",
+				"tooltip": "<b>Ro</b><br>In the past",
+				"pixmap": self.replaceImageColor(ro)
+			},
+			{
+				"label": "De",
+				"char": "@de|",
+				"tooltip": "<b>De</b><br>Physical Location",
+				"pixmap": self.replaceImageColor(de)
+			},
+			{
+				"label": "Do",
+				"char": "@do|",
+				"tooltip": "<b>Do</b><br>(Some other) Location",
+				"pixmap": self.replaceImageColor(do)
+			},
+			{
+				"label": "Zou",
+				"char": "@zou|",
+				"tooltip": "<b>Zou</b><br>This",
+				"pixmap": self.replaceImageColor(zou)
+			},
+			{
+				"label": "Ret",
+				"char": "@ret|",
+				"tooltip": "<b>Ret</b><br>(free for now)",
+				"pixmap": self.replaceImageColor(ret)
+			},
+			{
+				"label": "So",
+				"char": "@so|",
+				"tooltip": "<b>So</b><br>(free for now)",
+				"pixmap": self.replaceImageColor(so)
+			},
+		]
+
+		self.charToolbar = CharToolbar(
+			self.toolbarWidget,	# Parent
+			self.engOut,		# QTextEdit
+		)
+
+		self.charToolbar.setItems(toolbarItems)
 
 	def onSetLine(self, lineType):
 		self.lineType = lineType
